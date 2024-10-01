@@ -23,6 +23,9 @@ mediatek_setup_interfaces()
 	*2500wan-p5*)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" wan
 		;;
+	mediatek,mt7981-spim-snand-7981r128)
+		ucidef_set_interfaces_lan_wan "lan1 lan2" eth1
+		;;
 	xiaomi,mi-router-ax3000t* |\
 	xiaomi,mi-router-wr30u*)
 		ucidef_set_interfaces_lan_wan "eth0" "eth1"

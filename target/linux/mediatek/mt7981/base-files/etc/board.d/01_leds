@@ -21,6 +21,17 @@ clt,r30b1)
 	ucidef_set_led_default "internet" "INTERNET" "led_internet" "1"
 	ucidef_set_led_default "power_red" "POWER_RED" "led_power" "0"
 	;;
+mediatek,mt7981-spim-snand-7981r128)
+	ucidef_set_led_netdev "lan" "LAN" "LAN" "lan2"
+	ucidef_set_led_netdev "sfp" "SFP" "SFP" "eth1"
+	ucidef_set_led_netdev "wifi5g" "WIFI5G" "WIFI5G" "rax0"
+	ucidef_set_led_netdev "wifi2g" "WIFI2G" "WIFI2G" "ra0"
+     ;;
+mediatek,mt7981-spim-snand-7981r125)
+	ucidef_set_led_netdev "sfp" "SFP" "SFP" "eth1"
+	ucidef_set_led_netdev "wifi5g" "WIFI5G" "WIFI5G" "rax0"
+	ucidef_set_led_netdev "wifi2g" "WIFI2G" "WIFI2G" "ra0"
+     ;;
 imou,lc-hx3001|\
 nokia,ea0326gmp)
 	ucidef_set_led_netdev "wan" "WAN" "green:wan" "eth1" "link"
