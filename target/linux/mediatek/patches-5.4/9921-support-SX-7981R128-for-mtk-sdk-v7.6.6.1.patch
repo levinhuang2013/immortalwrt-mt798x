@@ -230,7 +230,6 @@ Index: linux-5.4.211/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
  	.mac_config = stmmac_mac_config,
  	.mac_an_restart = stmmac_mac_an_restart,
  	.mac_link_down = stmmac_mac_link_down,
-
 Index: linux-5.4.211/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
 ===================================================================
 --- linux-5.4.211.orig/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
@@ -6592,7 +6591,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  /* GPIO port control registers for GMAC 2*/
  #define GPIO_OD33_CTRL8		0x4c0
  #define GPIO_BIAS_CTRL		0xed0
-@@ -1032,81 +1061,159 @@ struct mtk_napi {
+@@ -1032,81 +1061,161 @@ struct mtk_napi {
  };
  
  enum mkt_eth_capabilities {
@@ -6660,7 +6659,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
 -	MTK_TRGMII_MT7621_CLK_BIT,
 -	MTK_QDMA_BIT,
 -	MTK_NETSYS_V2_BIT,
--	MTK_NETSYS_RX_V2_BIT,
+ 	MTK_NETSYS_RX_V2_BIT,
 -	MTK_SOC_MT7628_BIT,
 -	MTK_RSTCTRL_PPE1_BIT,
 -	MTK_U3_COPHY_V2_BIT,
@@ -6737,7 +6736,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
 -#define MTK_TRGMII_MT7621_CLK	BIT(MTK_TRGMII_MT7621_CLK_BIT)
 -#define MTK_QDMA		BIT(MTK_QDMA_BIT)
 -#define MTK_NETSYS_V2		BIT(MTK_NETSYS_V2_BIT)
--#define MTK_NETSYS_RX_V2	BIT(MTK_NETSYS_RX_V2_BIT)
+ #define MTK_NETSYS_RX_V2	BIT(MTK_NETSYS_RX_V2_BIT)
 -#define MTK_SOC_MT7628		BIT(MTK_SOC_MT7628_BIT)
 -#define MTK_RSTCTRL_PPE1	BIT(MTK_RSTCTRL_PPE1_BIT)
 -#define MTK_U3_COPHY_V2		BIT(MTK_U3_COPHY_V2_BIT)
