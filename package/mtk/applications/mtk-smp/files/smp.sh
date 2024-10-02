@@ -761,7 +761,7 @@ setup_model()
 	konka,komi-a31 |\
 	*nokia,ea0326gmp* |\
 	mediatek,mt7981-spim-snand-7981r125 |\
-	mediatek,mt7981-spim-snand-7981r128 |\
+	sx,7981r128 |\
 	newland,nl-wr8103 |\
 	newland,nl-wr9103 |\
 	nradio,wt9103 |\
