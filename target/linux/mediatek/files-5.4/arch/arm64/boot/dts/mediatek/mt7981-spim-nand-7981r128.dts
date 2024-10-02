@@ -2,7 +2,7 @@
 #include "mt7981.dtsi"
 / {
 	model = "SX-7981R128";
-	compatible = "sx,7981r128", "mediatek,mt7981";
+	compatible = "sx,7981r128";
 
 	aliases {
 		led-boot = &led-wifi2g;
