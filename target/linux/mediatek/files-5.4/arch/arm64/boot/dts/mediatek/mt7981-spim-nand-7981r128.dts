@@ -2,7 +2,15 @@
 #include "mt7981.dtsi"
 / {
 	model = "SX-7981R128";
-	compatible = "mediatek,mt7981-spim-snand-7981r128";
+	compatible = "sx,7981r128", "mediatek,mt7981";
+
+	aliases {
+		led-boot = &WIFI2G;
+		led-failsafe = &WIFI5G;
+		led-running = &POWER;
+		led-upgrade = &LAN;
+	};	
+
 	chosen {
 		bootargs = "console=ttyS0,115200n1 loglevel=8  \
 				earlycon=uart8250,mmio32,0x11002000";
@@ -163,9 +171,10 @@
 			compatible = "ethernet-phy-id67c9.de0a";
 			reg = <5>;
 			reset-gpios = <&pio 7 1>;
-			reset-assert-us = <600>;
+			reset-assert-us = <50000>;
 			reset-deassert-us = <20000>;
 			phy-mode = "2500base-x";
+			maxlinear,led-reg = <1008 192 0 0>;
 		};
 
 		switch@0 {
