@@ -2,7 +2,6 @@ KERNEL_LOADADDR := 0x48080000
 
 MT7981_USB_PKGS := automount blkid blockdev fdisk \
     kmod-nls-cp437 kmod-nls-iso8859-1 kmod-usb2 kmod-usb3 \
-    luci-app-usb-printer luci-i18n-usb-printer-zh-cn \
     kmod-usb-net-rndis usbutils
 
 define Device/mt7981-spim-nor-rfb
@@ -67,12 +66,12 @@ endef
 TARGET_DEVICES += mt7981-spim-nand-7981r125
 
 define Device/mt7981-spim-nand-7981r128
-  DEVICE_VENDOR := MediaTek
-  DEVICE_MODEL := mt7981-spim-nand-7981r128
+  DEVICE_VENDOR := SX
+  DEVICE_MODEL := 7981R128
   DEVICE_DTS := mt7981-spim-nand-7981r128
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   DEVICE_PACKAGES := $(MT7981_USB_PKGS) luci-app-samba4
-  SUPPORTED_DEVICES := mediatek,mt7981-spim-snand-7981r128
+  SUPPORTED_DEVICES := sx,7981r128
   UBINIZE_OPTS := -E 5
   BLOCKSIZE := 128k
   PAGESIZE := 2048
