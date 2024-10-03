@@ -4,13 +4,6 @@
 	model = "SX-7981R128";
 	compatible = "sx,7981r128";
 
-	aliases {
-		led-boot = &led-wifi2g;
-		led-failsafe = &led-wifi5g;
-		led-running = &led-power;
-		led-upgrade = &led-wifi5g;
-	};	
-
 	chosen {
 		bootargs = "console=ttyS0,115200n1 loglevel=8  \
 				earlycon=uart8250,mmio32,0x11002000";
