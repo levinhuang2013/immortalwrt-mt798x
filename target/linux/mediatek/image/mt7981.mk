@@ -65,7 +65,7 @@ define Device/mt7981-spim-nand-7981r125
 endef
 TARGET_DEVICES += mt7981-spim-nand-7981r125
 
-define Device/mt7981-spim-nand-7981r128
+define Device/sx_7981r128
   DEVICE_VENDOR := SX
   DEVICE_MODEL := 7981R128
   DEVICE_DTS := mt7981-spim-nand-7981r128
@@ -82,7 +82,7 @@ define Device/mt7981-spim-nand-7981r128
   IMAGE/factory.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
-TARGET_DEVICES += mt7981-spim-nand-7981r128
+TARGET_DEVICES += sx_7981r128
 
 define Device/mt7981-spim-nand-sfp
   DEVICE_VENDOR := MediaTek
