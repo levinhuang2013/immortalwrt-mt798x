@@ -8,10 +8,10 @@
 	compatible = "sx,7981r128", "mediatek,mt7981";
 
 	aliases {
-		led-boot = &led-wifi2g;
-		led-failsafe = &led-wifi5g;
+		led-boot = &led-power;
+		led-failsafe = &led-power;
 		led-running = &led-power;
-		led-upgrade = &led-wifi5g;
+		led-upgrade = &led-power;
 	};
 
 	chosen {
@@ -23,28 +23,31 @@
 		reg = <0 0x40000000 0 0x20000000>;
 	};
 
-	leds {
+	gpio-leds {
 		compatible = "gpio-leds";
 
 		sfp {
 			label = "SFP";
 			gpios = <&pio 4 1>;
+			default-state = "off";
+		};
+
+		wifi5g {
+			label = "WIFI5G";
+			gpios = <&pio 5 1>;
+			default-state = "off";
+		};
+
+		wifi2g {
+			label = "WIFI2G";
+			gpios = <&pio 6 1>;
+			default-state = "off";
 		};
 
 		lan {
 			label = "LAN";
 			gpios = <&pio 8 1>;
 			default-state = "off";
-		};
-
-		led-wifi5g: wifi5g {
-			label = "WIFI5G";
-			gpios = <&pio 5 1>;
-		};
-
-		led-wifi2g: wifi2g {
-			label = "WIFI2G";
-			gpios = <&pio 6 1>;
 		};
 
 		led-power: power {
