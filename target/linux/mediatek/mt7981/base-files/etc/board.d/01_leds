@@ -21,11 +21,6 @@ clt,r30b1)
 	ucidef_set_led_default "internet" "INTERNET" "led_internet" "1"
 	ucidef_set_led_default "power_red" "POWER_RED" "led_power" "0"
 	;;
-sx,7981r128)
-	ucidef_set_led_netdev "sfp" "SFP" "sfp:status" "eth1"
-	ucidef_set_led_netdev "wifi5g" "WIFI5G" "wifi5g:status" "rax0" "tx rx"
-	ucidef_set_led_netdev "wifi2g" "WIFI2G" "wifi2g:status" "ra0" "tx rx"
-     ;;
 mediatek,mt7981-spim-snand-7981r125)
 	ucidef_set_led_netdev "sfp" "SFP" "SFP" "eth1"
 	ucidef_set_led_netdev "wifi5g" "WIFI5G" "WIFI5G" "rax0"
