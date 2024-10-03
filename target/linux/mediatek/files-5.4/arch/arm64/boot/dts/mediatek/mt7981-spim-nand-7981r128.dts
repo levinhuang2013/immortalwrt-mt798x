@@ -1,4 +1,7 @@
 /dts-v1/;
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+
 #include "mt7981.dtsi"
 / {
 	model = "SX-7981R128";
@@ -24,8 +27,14 @@
 		compatible = "gpio-leds";
 
 		sfp {
-			label = "sfp:status";
+			label = "SFP";
 			gpios = <&pio 4 1>;
+		};
+
+		lan {
+			label = "LAN";
+			gpios = <&pio 8 1>;
+			default-state = "off";
 		};
 
 		led-wifi5g: wifi5g {
@@ -161,10 +170,10 @@
 			compatible = "ethernet-phy-id67c9.de0a";
 			reg = <5>;
 			reset-gpios = <&pio 7 1>;
-			reset-assert-us = <600>;
+			reset-assert-us = <50000>;
 			reset-deassert-us = <20000>;
 			phy-mode = "2500base-x";
-			maxlinear,led-reg = <1008 192 0 0>;
+			maxlinear,led-reg = <0x3c0 0x330 0x3c0 0x330>;
 		};
 
 		switch@0 {
