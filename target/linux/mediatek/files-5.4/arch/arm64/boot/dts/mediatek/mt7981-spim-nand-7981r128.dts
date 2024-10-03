@@ -164,9 +164,10 @@
 			compatible = "ethernet-phy-id67c9.de0a";
 			reg = <5>;
 			reset-gpios = <&pio 7 1>;
-			reset-assert-us = <600>;
+			reset-assert-us = <50000>;
 			reset-deassert-us = <20000>;
 			phy-mode = "2500base-x";
+			maxlinear,led-reg = <1008 192 0 0>;
 		};
 
 		switch@0 {
