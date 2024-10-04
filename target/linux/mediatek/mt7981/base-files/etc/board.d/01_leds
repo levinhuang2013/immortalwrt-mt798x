@@ -22,6 +22,7 @@ clt,r30b1)
 	ucidef_set_led_default "power_red" "POWER_RED" "led_power" "0"
 	;;
 sx,7981r128)
+	ucidef_set_led_netdev "lan" "LAN" "LAN" "lan2"
 	ucidef_set_led_netdev "sfp" "SFP" "SFP" "eth1"
 	ucidef_set_led_netdev "wifi5g" "WIFI5G" "WIFI5G" "rax0" "tx rx"
 	ucidef_set_led_netdev "wifi2g" "WIFI2G" "WIFI2G" "ra0" "tx rx"
