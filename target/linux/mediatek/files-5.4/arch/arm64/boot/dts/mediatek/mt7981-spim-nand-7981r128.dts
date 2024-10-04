@@ -26,31 +26,26 @@
 		sfp {
 			label = "SFP";
 			gpios = <&pio 4 GPIO_ACTIVE_LOW>;
-			default-state = "off";
 		};
 
 		WIFI5G: wifi5g {
 			label = "WIFI5G";
 			gpios = <&pio 5 GPIO_ACTIVE_LOW>;
-			default-state = "off";
 		};
 
 		WIFI2G: wifi2g {
 			label = "WIFI2G";
 			gpios = <&pio 6 GPIO_ACTIVE_LOW>;
-			default-state = "off";
 		};
 
 		lan {
 			label = "LAN";
 			gpios = <&pio 8 GPIO_ACTIVE_LOW>;
-			default-state = "off";
 		};
 
 		POWER: power {
 			label = "POWER";
 			gpios = <&pio 13 GPIO_ACTIVE_LOW>;
-			default-state = "on";
 		};
 	};
 
@@ -171,7 +166,7 @@
 			compatible = "ethernet-phy-id67c9.de0a";
 			reg = <5>;
 			reset-gpios = <&pio 7 1>;
-			reset-assert-us = <50000>;
+			reset-assert-us = <600>;
 			reset-deassert-us = <20000>;
 			phy-mode = "2500base-x";
 			maxlinear,led-reg = <0x3c0 0x330 0x3c0 0x330>;
