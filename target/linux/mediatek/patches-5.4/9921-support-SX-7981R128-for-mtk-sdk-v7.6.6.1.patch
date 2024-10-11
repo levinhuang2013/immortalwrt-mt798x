@@ -1,7 +1,7 @@
-Index: linux-5.4.211/drivers/gpio/gpiolib.c
+Index: linux-5.4.284/drivers/gpio/gpiolib.c
 ===================================================================
---- linux-5.4.211.orig/drivers/gpio/gpiolib.c
-+++ linux-5.4.211/drivers/gpio/gpiolib.c
+--- linux-5.4.284.orig/drivers/gpio/gpiolib.c
++++ linux-5.4.284/drivers/gpio/gpiolib.c
 @@ -4391,6 +4391,55 @@ static int platform_gpio_count(struct de
  	return count;
  }
@@ -58,10 +58,10 @@ Index: linux-5.4.211/drivers/gpio/gpiolib.c
  /**
   * gpiod_count - return the number of GPIOs associated with a device / function
   *		or -ENOENT if no GPIO has been assigned to the requested function
-Index: linux-5.4.211/drivers/gpio/gpiolib.h
+Index: linux-5.4.284/drivers/gpio/gpiolib.h
 ===================================================================
---- linux-5.4.211.orig/drivers/gpio/gpiolib.h
-+++ linux-5.4.211/drivers/gpio/gpiolib.h
+--- linux-5.4.284.orig/drivers/gpio/gpiolib.h
++++ linux-5.4.284/drivers/gpio/gpiolib.h
 @@ -117,6 +117,8 @@ struct gpio_desc {
  	const char		*name;
  };
@@ -71,10 +71,10 @@ Index: linux-5.4.211/drivers/gpio/gpiolib.h
  int gpiod_request(struct gpio_desc *desc, const char *label);
  void gpiod_free(struct gpio_desc *desc);
  int gpiod_configure_flags(struct gpio_desc *desc, const char *con_id,
-Index: linux-5.4.211/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
+Index: linux-5.4.284/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
-+++ linux-5.4.211/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
+--- linux-5.4.284.orig/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
++++ linux-5.4.284/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
 @@ -11,6 +11,7 @@
  #include <linux/ctype.h>
  #include <linux/stringify.h>
@@ -83,10 +83,10 @@ Index: linux-5.4.211/drivers/net/ethernet/broadcom/bnxt/bnxt_ethtool.c
  #include <linux/interrupt.h>
  #include <linux/pci.h>
  #include <linux/etherdevice.h>
-Index: linux-5.4.211/drivers/net/ethernet/intel/igb/igb_main.c
+Index: linux-5.4.284/drivers/net/ethernet/intel/igb/igb_main.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/intel/igb/igb_main.c
-+++ linux-5.4.211/drivers/net/ethernet/intel/igb/igb_main.c
+--- linux-5.4.284.orig/drivers/net/ethernet/intel/igb/igb_main.c
++++ linux-5.4.284/drivers/net/ethernet/intel/igb/igb_main.c
 @@ -2294,6 +2294,7 @@ void igb_reset(struct igb_adapter *adapt
  	case e1000_82575:
  	case e1000_i210:
@@ -95,11 +95,37 @@ Index: linux-5.4.211/drivers/net/ethernet/intel/igb/igb_main.c
  	default:
  		pba = E1000_PBA_34K;
  		break;
-Index: linux-5.4.211/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+Index: linux-5.4.284/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ linux-5.4.211/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -4827,8 +4823,8 @@ empty_set:
+--- linux-5.4.284.orig/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
++++ linux-5.4.284/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+@@ -58,11 +58,8 @@ static struct {
+  */
+ static void mvpp2_mac_config(struct phylink_config *config, unsigned int mode,
+ 			     const struct phylink_link_state *state);
+-static void mvpp2_mac_link_up(struct phylink_config *config,
+-			      struct phy_device *phy,
+-			      unsigned int mode, phy_interface_t interface,
+-			      int speed, int duplex,
+-			      bool tx_pause, bool rx_pause);
++static void mvpp2_mac_link_up(struct phylink_config *config, unsigned int mode,
++			      phy_interface_t interface, struct phy_device *phy);
+ 
+ /* Queue modes */
+ #define MVPP2_QDIST_SINGLE_MODE	0
+@@ -3471,9 +3468,8 @@ static void mvpp2_start_dev(struct mvpp2
+ 			.interface = port->phy_interface,
+ 		};
+ 		mvpp2_mac_config(&port->phylink_config, MLO_AN_INBAND, &state);
+-		mvpp2_mac_link_up(&port->phylink_config, NULL,
+-				  MLO_AN_INBAND, port->phy_interface,
+-				  SPEED_UNKNOWN, DUPLEX_UNKNOWN, false, false);
++		mvpp2_mac_link_up(&port->phylink_config, MLO_AN_INBAND,
++				  port->phy_interface, NULL);
+ 	}
+ 
+ 	netif_tx_start_all_queues(port->dev);
+@@ -4832,8 +4828,8 @@ empty_set:
  	bitmap_zero(supported, __ETHTOOL_LINK_MODE_MASK_NBITS);
  }
  
@@ -110,7 +136,7 @@ Index: linux-5.4.211/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
  {
  	u32 val;
  
-@@ -4847,8 +4843,8 @@ static void mvpp22_xlg_link_state(struct
+@@ -4852,8 +4848,8 @@ static void mvpp22_xlg_link_state(struct
  		state->pause |= MLO_PAUSE_RX;
  }
  
@@ -121,7 +147,7 @@ Index: linux-5.4.211/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
  {
  	u32 val;
  
-@@ -4881,8 +4877,8 @@ static void mvpp2_gmac_link_state(struct
+@@ -4886,8 +4882,8 @@ static void mvpp2_gmac_link_state(struct
  		state->pause |= MLO_PAUSE_TX;
  }
  
@@ -132,7 +158,7 @@ Index: linux-5.4.211/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
  {
  	struct mvpp2_port *port = mvpp2_phylink_to_port(config);
  
-@@ -4891,13 +4887,12 @@ static int mvpp2_phylink_mac_link_state(
+@@ -4896,13 +4892,12 @@ static int mvpp2_phylink_mac_link_state(
  		mode &= MVPP22_XLG_CTRL3_MACMODESELECT_MASK;
  
  		if (mode == MVPP22_XLG_CTRL3_MACMODESELECT_10G) {
@@ -149,7 +175,21 @@ Index: linux-5.4.211/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
  }
  
  static void mvpp2_mac_an_restart(struct phylink_config *config)
-@@ -5188,7 +5180,7 @@ static void mvpp2_mac_link_down(struct p
+@@ -5134,11 +5129,8 @@ static void mvpp2_mac_config(struct phyl
+ 	mvpp2_port_enable(port);
+ }
+ 
+-static void mvpp2_mac_link_up(struct phylink_config *config,
+-			      struct phy_device *phy,
+-			      unsigned int mode, phy_interface_t interface,
+-			      int speed, int duplex,
+-			      bool tx_pause, bool rx_pause)
++static void mvpp2_mac_link_up(struct phylink_config *config, unsigned int mode,
++			      phy_interface_t interface, struct phy_device *phy)
+ {
+ 	struct mvpp2_port *port = mvpp2_phylink_to_port(config);
+ 	u32 val;
+@@ -5193,7 +5185,7 @@ static void mvpp2_mac_link_down(struct p
  
  static const struct phylink_mac_ops mvpp2_phylink_ops = {
  	.validate = mvpp2_phylink_validate,
@@ -158,11 +198,11 @@ Index: linux-5.4.211/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
  	.mac_an_restart = mvpp2_mac_an_restart,
  	.mac_config = mvpp2_mac_config,
  	.mac_link_up = mvpp2_mac_link_up,
-Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+Index: linux-5.4.284/drivers/net/ethernet/mediatek/mtk_eth_soc.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -441,8 +441,8 @@ init_err:
+--- linux-5.4.284.orig/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ linux-5.4.284/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -452,8 +452,8 @@ init_err:
  		mac->id, phy_modes(state->interface), err);
  }
  
@@ -173,7 +213,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  {
  	struct mtk_mac *mac = container_of(config, struct mtk_mac,
  					   phylink_config);
-@@ -471,8 +471,6 @@ static int mtk_mac_link_state(struct phy
+@@ -482,8 +482,6 @@ static int mtk_mac_link_state(struct phy
  		state->pause |= MLO_PAUSE_RX;
  	if (pmsr & MAC_MSR_TX_FC)
  		state->pause |= MLO_PAUSE_TX;
@@ -182,7 +222,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  }
  
  static void mtk_mac_an_restart(struct phylink_config *config)
-@@ -595,7 +593,7 @@ static void mtk_validate(struct phylink_
+@@ -606,7 +604,7 @@ static void mtk_validate(struct phylink_
  
  static const struct phylink_mac_ops mtk_phylink_ops = {
  	.validate = mtk_validate,
@@ -191,10 +231,10 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  	.mac_an_restart = mtk_mac_an_restart,
  	.mac_config = mtk_mac_config,
  	.mac_link_down = mtk_mac_link_down,
-Index: linux-5.4.211/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+Index: linux-5.4.284/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ linux-5.4.211/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+--- linux-5.4.284.orig/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ linux-5.4.284/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 @@ -843,10 +843,10 @@ static void stmmac_validate(struct phyli
  		      __ETHTOOL_LINK_MODE_MASK_NBITS);
  }
@@ -230,11 +270,11 @@ Index: linux-5.4.211/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
  	.mac_config = stmmac_mac_config,
  	.mac_an_restart = stmmac_mac_an_restart,
  	.mac_link_down = stmmac_mac_link_down,
-Index: linux-5.4.211/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+Index: linux-5.4.284/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ linux-5.4.211/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -1418,8 +1418,8 @@ static void axienet_validate(struct phyl
+--- linux-5.4.284.orig/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ linux-5.4.284/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -1540,8 +1540,8 @@ static void axienet_validate(struct phyl
  		   __ETHTOOL_LINK_MODE_MASK_NBITS);
  }
  
@@ -245,7 +285,7 @@ Index: linux-5.4.211/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
  {
  	struct net_device *ndev = to_net_dev(config->dev);
  	struct axienet_local *lp = netdev_priv(ndev);
-@@ -1444,8 +1444,6 @@ static int axienet_mac_link_state(struct
+@@ -1566,8 +1566,6 @@ static int axienet_mac_link_state(struct
  
  	state->an_complete = 0;
  	state->duplex = 1;
@@ -254,17 +294,32 @@ Index: linux-5.4.211/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
  }
  
  static void axienet_mac_an_restart(struct phylink_config *config)
-@@ -1513,5 +1511,5 @@ static const struct phylink_mac_ops axi
+@@ -1623,17 +1621,16 @@ static void axienet_mac_link_down(struct
+ }
+ 
+ static void axienet_mac_link_up(struct phylink_config *config,
+-				struct phy_device *phy,
+-				unsigned int mode, phy_interface_t interface,
+-				int speed, int duplex,
+-				bool tx_pause, bool rx_pause)
++				unsigned int mode,
++				phy_interface_t interface,
++				struct phy_device *phy)
+ {
+ 	/* nothing meaningful to do */
+ }
+ 
+ static const struct phylink_mac_ops axienet_phylink_ops = {
  	.validate = axienet_validate,
 -	.mac_link_state = axienet_mac_link_state,
 +	.mac_pcs_get_state = axienet_mac_pcs_get_state,
  	.mac_an_restart = axienet_mac_an_restart,
  	.mac_config = axienet_mac_config,
  	.mac_link_down = axienet_mac_link_down,
-Index: linux-5.4.211/drivers/net/phy/Makefile
+Index: linux-5.4.284/drivers/net/phy/Makefile
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/Makefile
-+++ linux-5.4.211/drivers/net/phy/Makefile
+--- linux-5.4.284.orig/drivers/net/phy/Makefile
++++ linux-5.4.284/drivers/net/phy/Makefile
 @@ -1,7 +1,8 @@
  # SPDX-License-Identifier: GPL-2.0
  # Makefile for Linux PHY drivers and MDIO bus drivers
@@ -275,10 +330,10 @@ Index: linux-5.4.211/drivers/net/phy/Makefile
  mdio-bus-y			+= mdio_bus.o mdio_device.o
  
  ifdef CONFIG_MDIO_DEVICE
-Index: linux-5.4.211/drivers/net/phy/bcm87xx.c
+Index: linux-5.4.284/drivers/net/phy/bcm87xx.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/bcm87xx.c
-+++ linux-5.4.211/drivers/net/phy/bcm87xx.c
+--- linux-5.4.284.orig/drivers/net/phy/bcm87xx.c
++++ linux-5.4.284/drivers/net/phy/bcm87xx.c
 @@ -55,7 +55,7 @@ static int bcm87xx_of_reg_init(struct ph
  		u16 mask	= be32_to_cpup(paddr++);
  		u16 val_bits	= be32_to_cpup(paddr++);
@@ -288,10 +343,10 @@ Index: linux-5.4.211/drivers/net/phy/bcm87xx.c
  		val = 0;
  		if (mask) {
  			val = phy_read(phydev, regnum);
-Index: linux-5.4.211/drivers/net/phy/cortina.c
+Index: linux-5.4.284/drivers/net/phy/cortina.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/cortina.c
-+++ linux-5.4.211/drivers/net/phy/cortina.c
+--- linux-5.4.284.orig/drivers/net/phy/cortina.c
++++ linux-5.4.284/drivers/net/phy/cortina.c
 @@ -17,8 +17,7 @@
  
  static int cortina_read_reg(struct phy_device *phydev, u16 regnum)
@@ -302,10 +357,10 @@ Index: linux-5.4.211/drivers/net/phy/cortina.c
  }
  
  static int cortina_read_status(struct phy_device *phydev)
-Index: linux-5.4.211/drivers/net/phy/fixed_phy.c
+Index: linux-5.4.284/drivers/net/phy/fixed_phy.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/fixed_phy.c
-+++ linux-5.4.211/drivers/net/phy/fixed_phy.c
+--- linux-5.4.284.orig/drivers/net/phy/fixed_phy.c
++++ linux-5.4.284/drivers/net/phy/fixed_phy.c
 @@ -167,8 +167,8 @@ static int fixed_phy_add_gpiod(unsigned
  }
  
@@ -317,10 +372,10 @@ Index: linux-5.4.211/drivers/net/phy/fixed_phy.c
  	return fixed_phy_add_gpiod(irq, phy_addr, status, NULL);
  }
  EXPORT_SYMBOL_GPL(fixed_phy_add);
-Index: linux-5.4.211/drivers/net/phy/linkmode.c
+Index: linux-5.4.284/drivers/net/phy/linkmode.c
 ===================================================================
 --- /dev/null
-+++ linux-5.4.211/drivers/net/phy/linkmode.c
++++ linux-5.4.284/drivers/net/phy/linkmode.c
 @@ -0,0 +1,95 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +#include <linux/linkmode.h>
@@ -417,10 +472,10 @@ Index: linux-5.4.211/drivers/net/phy/linkmode.c
 +			 rx ^ tx);
 +}
 +EXPORT_SYMBOL_GPL(linkmode_set_pause);
-Index: linux-5.4.211/drivers/net/phy/lxt.c
+Index: linux-5.4.284/drivers/net/phy/lxt.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/lxt.c
-+++ linux-5.4.211/drivers/net/phy/lxt.c
+--- linux-5.4.284.orig/drivers/net/phy/lxt.c
++++ linux-5.4.284/drivers/net/phy/lxt.c
 @@ -168,8 +168,8 @@ static int lxt973a2_read_status(struct p
  				return lpa;
  
@@ -432,10 +487,10 @@ Index: linux-5.4.211/drivers/net/phy/lxt.c
  		} while (lpa == adv && retry--);
  
  		mii_lpa_to_linkmode_lpa_t(phydev->lp_advertising, lpa);
-Index: linux-5.4.211/drivers/net/phy/mdio_bus.c
+Index: linux-5.4.284/drivers/net/phy/mdio_bus.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/mdio_bus.c
-+++ linux-5.4.211/drivers/net/phy/mdio_bus.c
+--- linux-5.4.284.orig/drivers/net/phy/mdio_bus.c
++++ linux-5.4.284/drivers/net/phy/mdio_bus.c
 @@ -328,7 +328,7 @@ static inline void of_mdiobus_link_mdiod
  #endif
  
@@ -512,10 +567,10 @@ Index: linux-5.4.211/drivers/net/phy/mdio_bus.c
   * mdio_bus_match - determine if given MDIO driver supports the given
   *		    MDIO device
   * @dev: target MDIO device
-Index: linux-5.4.211/drivers/net/phy/national.c
+Index: linux-5.4.284/drivers/net/phy/national.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/national.c
-+++ linux-5.4.211/drivers/net/phy/national.c
+--- linux-5.4.284.orig/drivers/net/phy/national.c
++++ linux-5.4.284/drivers/net/phy/national.c
 @@ -83,7 +83,8 @@ static int ns_ack_interrupt(struct phy_d
  		return ret;
  
@@ -536,10 +591,10 @@ Index: linux-5.4.211/drivers/net/phy/national.c
  	ns_10_base_t_hdx_loopack(phydev, hdx_loopback_off);
  	return ns_ack_interrupt(phydev);
  }
-Index: linux-5.4.211/drivers/net/phy/phy-c45.c
+Index: linux-5.4.284/drivers/net/phy/phy-c45.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/phy-c45.c
-+++ linux-5.4.211/drivers/net/phy/phy-c45.c
+--- linux-5.4.284.orig/drivers/net/phy/phy-c45.c
++++ linux-5.4.284/drivers/net/phy/phy-c45.c
 @@ -9,7 +9,7 @@
  #include <linux/phy.h>
  
@@ -567,10 +622,10 @@ Index: linux-5.4.211/drivers/net/phy/phy-c45.c
  		val = phy_read_mmd(phydev, MDIO_MMD_AN, MDIO_STAT1);
  		if (val < 0)
  			return val;
-Index: linux-5.4.211/drivers/net/phy/phy-core.c
+Index: linux-5.4.284/drivers/net/phy/phy-core.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/phy-core.c
-+++ linux-5.4.211/drivers/net/phy/phy-core.c
+--- linux-5.4.284.orig/drivers/net/phy/phy-core.c
++++ linux-5.4.284/drivers/net/phy/phy-core.c
 @@ -8,7 +8,7 @@
  
  const char *phy_speed_to_str(int speed)
@@ -624,10 +679,10 @@ Index: linux-5.4.211/drivers/net/phy/phy-core.c
  	} else {
  		struct mii_bus *bus = phydev->mdio.bus;
  		int phy_addr = phydev->mdio.addr;
-Index: linux-5.4.211/drivers/net/phy/phy.c
+Index: linux-5.4.284/drivers/net/phy/phy.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/phy.c
-+++ linux-5.4.211/drivers/net/phy/phy.c
+--- linux-5.4.284.orig/drivers/net/phy/phy.c
++++ linux-5.4.284/drivers/net/phy/phy.c
 @@ -52,13 +52,13 @@ static const char *phy_state_to_str(enum
  
  static void phy_link_up(struct phy_device *phydev)
@@ -691,10 +746,10 @@ Index: linux-5.4.211/drivers/net/phy/phy.c
  		}
  		do_suspend = true;
  		break;
-Index: linux-5.4.211/drivers/net/phy/phy_device.c
+Index: linux-5.4.284/drivers/net/phy/phy_device.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/phy_device.c
-+++ linux-5.4.211/drivers/net/phy/phy_device.c
+--- linux-5.4.284.orig/drivers/net/phy/phy_device.c
++++ linux-5.4.284/drivers/net/phy/phy_device.c
 @@ -31,6 +31,8 @@
  #include <linux/mdio.h>
  #include <linux/io.h>
@@ -959,10 +1014,10 @@ Index: linux-5.4.211/drivers/net/phy/phy_device.c
  
  	if (err)
  		goto out;
-Index: linux-5.4.211/drivers/net/phy/phylink.c
+Index: linux-5.4.284/drivers/net/phy/phylink.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/phylink.c
-+++ linux-5.4.211/drivers/net/phy/phylink.c
+--- linux-5.4.284.orig/drivers/net/phy/phylink.c
++++ linux-5.4.284/drivers/net/phy/phylink.c
 @@ -5,6 +5,7 @@
   *
   * Copyright (C) 2015 Russell King
@@ -3414,10 +3469,10 @@ Index: linux-5.4.211/drivers/net/phy/phylink.c
 +EXPORT_SYMBOL_GPL(phylink_mii_c45_pcs_get_state);
 +
  MODULE_LICENSE("GPL v2");
-Index: linux-5.4.211/drivers/net/phy/vitesse.c
+Index: linux-5.4.284/drivers/net/phy/vitesse.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/vitesse.c
-+++ linux-5.4.211/drivers/net/phy/vitesse.c
+--- linux-5.4.284.orig/drivers/net/phy/vitesse.c
++++ linux-5.4.284/drivers/net/phy/vitesse.c
 @@ -245,7 +245,8 @@ static int vsc73xx_config_aneg(struct ph
  
  /* This adds a skew for both TX and RX clocks, so the skew should only be
@@ -3428,10 +3483,10 @@ Index: linux-5.4.211/drivers/net/phy/vitesse.c
  static int vsc8601_add_skew(struct phy_device *phydev)
  {
  	int ret;
-Index: linux-5.4.211/include/linux/gpio/consumer.h
+Index: linux-5.4.284/include/linux/gpio/consumer.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/gpio/consumer.h
-+++ linux-5.4.211/include/linux/gpio/consumer.h
+--- linux-5.4.284.orig/include/linux/gpio/consumer.h
++++ linux-5.4.284/include/linux/gpio/consumer.h
 @@ -177,6 +177,15 @@ struct gpio_desc *fwnode_get_named_gpiod
  					 const char *propname, int index,
  					 enum gpiod_flags dflags,
@@ -3448,10 +3503,10 @@ Index: linux-5.4.211/include/linux/gpio/consumer.h
  struct gpio_desc *devm_fwnode_get_index_gpiod_from_child(struct device *dev,
  						const char *con_id, int index,
  						struct fwnode_handle *child,
-Index: linux-5.4.211/include/linux/linkmode.h
+Index: linux-5.4.284/include/linux/linkmode.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/linkmode.h
-+++ linux-5.4.211/include/linux/linkmode.h
+--- linux-5.4.284.orig/include/linux/linkmode.h
++++ linux-5.4.284/include/linux/linkmode.h
 @@ -82,4 +82,16 @@ static inline int linkmode_equal(const u
  	return bitmap_equal(src1, src2, __ETHTOOL_LINK_MODE_MASK_NBITS);
  }
@@ -3469,10 +3524,10 @@ Index: linux-5.4.211/include/linux/linkmode.h
 +void linkmode_set_pause(unsigned long *advertisement, bool tx, bool rx);
 +
  #endif /* __LINKMODE_H */
-Index: linux-5.4.211/include/linux/mdio.h
+Index: linux-5.4.284/include/linux/mdio.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/mdio.h
-+++ linux-5.4.211/include/linux/mdio.h
+--- linux-5.4.284.orig/include/linux/mdio.h
++++ linux-5.4.284/include/linux/mdio.h
 @@ -18,6 +18,13 @@
  #define MII_DEVADDR_C45_MASK	GENMASK(20, 16)
  #define MII_REGADDR_C45_MASK	GENMASK(15, 0)
@@ -3534,10 +3589,10 @@ Index: linux-5.4.211/include/linux/mdio.h
 +#define MDIO_USXGMII_LINK		0x8000	/* PHY link with copper-side partner */
 +
  #endif /* __LINUX_MDIO_H__ */
-Index: linux-5.4.211/include/linux/mii.h
+Index: linux-5.4.284/include/linux/mii.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/mii.h
-+++ linux-5.4.211/include/linux/mii.h
+--- linux-5.4.284.orig/include/linux/mii.h
++++ linux-5.4.284/include/linux/mii.h
 @@ -486,6 +486,25 @@ static inline u32 linkmode_adv_to_lcl_ad
  }
  
@@ -3564,11 +3619,11 @@ Index: linux-5.4.211/include/linux/mii.h
   * mii_advertise_flowctrl - get flow control advertisement flags
   * @cap: Flow control capabilities (FLOW_CTRL_RX, FLOW_CTRL_TX or both)
   */
-Index: linux-5.4.211/include/linux/phy.h
+Index: linux-5.4.284/include/linux/phy.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/phy.h
-+++ linux-5.4.211/include/linux/phy.h
-@@ -86,6 +86,7 @@ typedef enum {
+--- linux-5.4.284.orig/include/linux/phy.h
++++ linux-5.4.284/include/linux/phy.h
+@@ -85,6 +85,7 @@ typedef enum {
  	PHY_INTERFACE_MODE_TBI,
  	PHY_INTERFACE_MODE_REVMII,
  	PHY_INTERFACE_MODE_RMII,
@@ -3576,7 +3631,7 @@ Index: linux-5.4.211/include/linux/phy.h
  	PHY_INTERFACE_MODE_RGMII,
  	PHY_INTERFACE_MODE_RGMII_ID,
  	PHY_INTERFACE_MODE_RGMII_RXID,
-@@ -93,19 +94,59 @@ typedef enum {
+@@ -92,19 +93,59 @@ typedef enum {
  	PHY_INTERFACE_MODE_RTBI,
  	PHY_INTERFACE_MODE_SMII,
  	PHY_INTERFACE_MODE_XGMII,
@@ -3638,7 +3693,7 @@ Index: linux-5.4.211/include/linux/phy.h
  /**
   * phy_supported_speeds - return all speeds currently supported by a phy device
   * @phy: The phy device to return supported speeds of.
-@@ -196,12 +237,6 @@ static inline const char *phy_modes(phy_
+@@ -195,12 +236,6 @@ static inline const char *phy_modes(phy_
  
  #define MII_BUS_ID_SIZE	61
  
@@ -3651,7 +3706,7 @@ Index: linux-5.4.211/include/linux/phy.h
  struct device;
  struct phylink;
  struct sfp_bus;
-@@ -320,11 +355,13 @@ enum phy_state {
+@@ -319,11 +354,13 @@ enum phy_state {
  
  /**
   * struct phy_c45_device_ids - 802.3-c45 Device Identifiers
@@ -3666,7 +3721,7 @@ Index: linux-5.4.211/include/linux/phy.h
  	u32 device_ids[8];
  };
  
-@@ -382,6 +419,8 @@ struct phy_device {
+@@ -381,6 +418,8 @@ struct phy_device {
  	unsigned sysfs_links:1;
  	unsigned loopback_enabled:1;
  
@@ -3675,7 +3730,7 @@ Index: linux-5.4.211/include/linux/phy.h
  	unsigned autoneg:1;
  	/* The most recently read link state */
  	unsigned link:1;
-@@ -448,7 +487,7 @@ struct phy_device {
+@@ -447,7 +486,7 @@ struct phy_device {
  	u8 mdix;
  	u8 mdix_ctrl;
  
@@ -3684,7 +3739,7 @@ Index: linux-5.4.211/include/linux/phy.h
  	void (*adjust_link)(struct net_device *dev);
  };
  #define to_phy_device(d) container_of(to_mdio_device(d), \
-@@ -1029,6 +1068,10 @@ struct phy_device *phy_device_create(str
+@@ -1016,6 +1055,10 @@ struct phy_device *phy_device_create(str
  struct phy_device *get_phy_device(struct mii_bus *bus, int addr, bool is_c45);
  int phy_device_register(struct phy_device *phy);
  void phy_device_free(struct phy_device *phydev);
@@ -3695,7 +3750,7 @@ Index: linux-5.4.211/include/linux/phy.h
  #else
  static inline
  struct phy_device *get_phy_device(struct mii_bus *bus, int addr, bool is_c45)
-@@ -1041,6 +1084,24 @@ static inline int phy_device_register(st
+@@ -1028,6 +1071,24 @@ static inline int phy_device_register(st
  	return 0;
  }
  
@@ -3720,7 +3775,7 @@ Index: linux-5.4.211/include/linux/phy.h
  static inline void phy_device_free(struct phy_device *phydev) { }
  #endif /* CONFIG_PHYLIB */
  void phy_device_remove(struct phy_device *phydev);
-@@ -1100,6 +1161,8 @@ static inline const char *phydev_name(co
+@@ -1087,6 +1148,8 @@ static inline const char *phydev_name(co
  
  void phy_attached_print(struct phy_device *phydev, const char *fmt, ...)
  	__printf(2, 3);
@@ -3729,7 +3784,7 @@ Index: linux-5.4.211/include/linux/phy.h
  void phy_attached_info(struct phy_device *phydev);
  
  /* Clause 22 PHY */
-@@ -1201,6 +1264,7 @@ void phy_set_sym_pause(struct phy_device
+@@ -1188,6 +1251,7 @@ void phy_set_sym_pause(struct phy_device
  void phy_set_asym_pause(struct phy_device *phydev, bool rx, bool tx);
  bool phy_validate_pause(struct phy_device *phydev,
  			struct ethtool_pauseparam *pp);
@@ -3737,10 +3792,10 @@ Index: linux-5.4.211/include/linux/phy.h
  
  int phy_register_fixup(const char *bus_id, u32 phy_uid, u32 phy_uid_mask,
  		       int (*run)(struct phy_device *));
-Index: linux-5.4.211/include/linux/phylink.h
+Index: linux-5.4.284/include/linux/phylink.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/phylink.h
-+++ linux-5.4.211/include/linux/phylink.h
+--- linux-5.4.284.orig/include/linux/phylink.h
++++ linux-5.4.284/include/linux/phylink.h
 @@ -12,16 +12,37 @@ struct net_device;
  
  enum {
@@ -4213,10 +4268,10 @@ Index: linux-5.4.211/include/linux/phylink.h
 +void phylink_decode_usxgmii_word(struct phylink_link_state *state,
 +				 uint16_t lpa);
  #endif
-Index: linux-5.4.211/include/uapi/linux/ethtool.h
+Index: linux-5.4.284/include/uapi/linux/ethtool.h
 ===================================================================
---- linux-5.4.211.orig/include/uapi/linux/ethtool.h
-+++ linux-5.4.211/include/uapi/linux/ethtool.h
+--- linux-5.4.284.orig/include/uapi/linux/ethtool.h
++++ linux-5.4.284/include/uapi/linux/ethtool.h
 @@ -1507,6 +1507,29 @@ enum ethtool_link_mode_bit_indices {
  	ETHTOOL_LINK_MODE_200000baseCR4_Full_BIT	 = 66,
  	ETHTOOL_LINK_MODE_100baseT1_Full_BIT		 = 67,
@@ -4255,10 +4310,10 @@ Index: linux-5.4.211/include/uapi/linux/ethtool.h
  
  #define SPEED_UNKNOWN		-1
  
-Index: linux-5.4.211/include/uapi/linux/mii.h
+Index: linux-5.4.284/include/uapi/linux/mii.h
 ===================================================================
---- linux-5.4.211.orig/include/uapi/linux/mii.h
-+++ linux-5.4.211/include/uapi/linux/mii.h
+--- linux-5.4.284.orig/include/uapi/linux/mii.h
++++ linux-5.4.284/include/uapi/linux/mii.h
 @@ -131,14 +131,33 @@
  #define NWAYTEST_LOOPBACK	0x0100	/* Enable loopback for N-way   */
  #define NWAYTEST_RESV2		0xfe00	/* Unused...                   */
@@ -4293,10 +4348,10 @@ Index: linux-5.4.211/include/uapi/linux/mii.h
  #define LPA_1000LOCALRXOK	0x2000	/* Link partner local receiver status */
  #define LPA_1000REMRXOK		0x1000	/* Link partner remote receiver status */
  #define LPA_1000FULL		0x0800	/* Link partner 1000BASE-T full duplex */
-Index: linux-5.4.211/net/dsa/dsa_priv.h
+Index: linux-5.4.284/net/dsa/dsa_priv.h
 ===================================================================
---- linux-5.4.211.orig/net/dsa/dsa_priv.h
-+++ linux-5.4.211/net/dsa/dsa_priv.h
+--- linux-5.4.284.orig/net/dsa/dsa_priv.h
++++ linux-5.4.284/net/dsa/dsa_priv.h
 @@ -182,8 +182,8 @@ void dsa_port_link_unregister_of(struct
  void dsa_port_phylink_validate(struct phylink_config *config,
  			       unsigned long *supported,
@@ -4325,10 +4380,10 @@ Index: linux-5.4.211/net/dsa/dsa_priv.h
  extern const struct phylink_mac_ops dsa_port_phylink_mac_ops;
  
  /* slave.c */
-Index: linux-5.4.211/net/dsa/port.c
+Index: linux-5.4.284/net/dsa/port.c
 ===================================================================
---- linux-5.4.211.orig/net/dsa/port.c
-+++ linux-5.4.211/net/dsa/port.c
+--- linux-5.4.284.orig/net/dsa/port.c
++++ linux-5.4.284/net/dsa/port.c
 @@ -467,19 +467,22 @@ void dsa_port_phylink_validate(struct ph
  }
  EXPORT_SYMBOL_GPL(dsa_port_phylink_validate);
@@ -4385,10 +4440,10 @@ Index: linux-5.4.211/net/dsa/port.c
  	.mac_config = dsa_port_phylink_mac_config,
  	.mac_an_restart = dsa_port_phylink_mac_an_restart,
  	.mac_link_down = dsa_port_phylink_mac_link_down,
-Index: linux-5.4.211/net/dsa/slave.c
+Index: linux-5.4.284/net/dsa/slave.c
 ===================================================================
---- linux-5.4.211.orig/net/dsa/slave.c
-+++ linux-5.4.211/net/dsa/slave.c
+--- linux-5.4.284.orig/net/dsa/slave.c
++++ linux-5.4.284/net/dsa/slave.c
 @@ -1290,10 +1290,10 @@ void dsa_port_phylink_mac_change(struct
  }
  EXPORT_SYMBOL_GPL(dsa_port_phylink_mac_change);
@@ -4432,10 +4487,10 @@ Index: linux-5.4.211/net/dsa/slave.c
  	if (ds->ops->get_phy_flags)
  		phy_flags = ds->ops->get_phy_flags(ds, dp->index);
  
-Index: linux-5.4.211/drivers/net/phy/sfp-bus.c
+Index: linux-5.4.284/drivers/net/phy/sfp-bus.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/sfp-bus.c
-+++ linux-5.4.211/drivers/net/phy/sfp-bus.c
+--- linux-5.4.284.orig/drivers/net/phy/sfp-bus.c
++++ linux-5.4.284/drivers/net/phy/sfp-bus.c
 @@ -10,12 +10,6 @@
  
  #include "sfp.h"
@@ -4740,10 +4795,10 @@ Index: linux-5.4.211/drivers/net/phy/sfp-bus.c
  
  	if (ops && ops->module_insert)
  		ret = ops->module_insert(bus->upstream, id);
-Index: linux-5.4.211/drivers/net/phy/sfp.c
+Index: linux-5.4.284/drivers/net/phy/sfp.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/sfp.c
-+++ linux-5.4.211/drivers/net/phy/sfp.c
+--- linux-5.4.284.orig/drivers/net/phy/sfp.c
++++ linux-5.4.284/drivers/net/phy/sfp.c
 @@ -1,6 +1,7 @@
  // SPDX-License-Identifier: GPL-2.0
  #include <linux/acpi.h>
@@ -5401,10 +5456,10 @@ Index: linux-5.4.211/drivers/net/phy/sfp.c
  	sfp_unregister_socket(sfp->sfp_bus);
  
  	rtnl_lock();
-Index: linux-5.4.211/drivers/net/phy/sfp.h
+Index: linux-5.4.284/drivers/net/phy/sfp.h
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/sfp.h
-+++ linux-5.4.211/drivers/net/phy/sfp.h
+--- linux-5.4.284.orig/drivers/net/phy/sfp.h
++++ linux-5.4.284/drivers/net/phy/sfp.h
 @@ -6,6 +6,13 @@
  
  struct sfp;
@@ -5438,10 +5493,10 @@ Index: linux-5.4.211/drivers/net/phy/sfp.h
  void sfp_module_remove(struct sfp_bus *bus);
  int sfp_module_start(struct sfp_bus *bus);
  void sfp_module_stop(struct sfp_bus *bus);
-Index: linux-5.4.211/include/linux/ethtool.h
+Index: linux-5.4.284/include/linux/ethtool.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/ethtool.h
-+++ linux-5.4.211/include/linux/ethtool.h
+--- linux-5.4.284.orig/include/linux/ethtool.h
++++ linux-5.4.284/include/linux/ethtool.h
 @@ -416,6 +416,15 @@ struct ethtool_rx_flow_spec_input {
  	u32					rss_ctx;
  };
@@ -5458,10 +5513,10 @@ Index: linux-5.4.211/include/linux/ethtool.h
  struct ethtool_rx_flow_rule *
  ethtool_rx_flow_rule_create(const struct ethtool_rx_flow_spec_input *input);
  void ethtool_rx_flow_rule_destroy(struct ethtool_rx_flow_rule *rule);
-Index: linux-5.4.211/include/uapi/linux/ethtool.h
+Index: linux-5.4.284/include/uapi/linux/ethtool.h
 ===================================================================
---- linux-5.4.211.orig/include/uapi/linux/ethtool.h
-+++ linux-5.4.211/include/uapi/linux/ethtool.h
+--- linux-5.4.284.orig/include/uapi/linux/ethtool.h
++++ linux-5.4.284/include/uapi/linux/ethtool.h
 @@ -26,6 +26,14 @@
   * have the same layout for 32-bit and 64-bit userland.
   */
@@ -5801,10 +5856,10 @@ Index: linux-5.4.211/include/uapi/linux/ethtool.h
  	__u32	reserved[7];
  	__u32	link_mode_masks[0];
  	/* layout of link_mode_masks fields:
-Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_path.c
+Index: linux-5.4.284/drivers/net/ethernet/mediatek/mtk_eth_path.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/mediatek/mtk_eth_path.c
-+++ linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_path.c
+--- linux-5.4.284.orig/drivers/net/ethernet/mediatek/mtk_eth_path.c
++++ linux-5.4.284/drivers/net/ethernet/mediatek/mtk_eth_path.c
 @@ -15,10 +15,10 @@
  struct mtk_eth_muxc {
  	const char	*name;
@@ -6136,11 +6191,11 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_path.c
 +	return mtk_eth_mux_setup(eth, path);
  }
 -
-Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+Index: linux-5.4.284/drivers/net/ethernet/mediatek/mtk_eth_soc.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -215,7 +215,7 @@ static int mt7621_gmac0_rgmii_adjust(str
+--- linux-5.4.284.orig/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ linux-5.4.284/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -226,7 +226,7 @@ static int mt7621_gmac0_rgmii_adjust(str
  }
  
  static void mtk_gmac0_rgmii_adjust(struct mtk_eth *eth,
@@ -6149,7 +6204,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  {
  	u32 val;
  	int ret;
-@@ -229,26 +229,7 @@ static void mtk_gmac0_rgmii_adjust(struc
+@@ -240,26 +240,7 @@ static void mtk_gmac0_rgmii_adjust(struc
  		return;
  	}
  
@@ -6177,7 +6232,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  }
  
  static void mtk_mac_config(struct phylink_config *config, unsigned int mode,
-@@ -257,8 +238,8 @@ static void mtk_mac_config(struct phylin
+@@ -268,8 +249,8 @@ static void mtk_mac_config(struct phylin
  	struct mtk_mac *mac = container_of(config, struct mtk_mac,
  					   phylink_config);
  	struct mtk_eth *eth = mac->hw;
@@ -6188,7 +6243,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  
  	/* MT76x8 has no hardware settings between for the MAC */
  	if (!MTK_HAS_CAPS(eth->soc->caps, MTK_SOC_MT7628) &&
-@@ -271,7 +252,7 @@ static void mtk_mac_config(struct phylin
+@@ -282,7 +263,7 @@ static void mtk_mac_config(struct phylin
  			if (!MTK_HAS_CAPS(mac->hw->soc->caps,
  					  MTK_GMAC1_TRGMII))
  				goto err_phy;
@@ -6197,7 +6252,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  		case PHY_INTERFACE_MODE_RGMII_TXID:
  		case PHY_INTERFACE_MODE_RGMII_RXID:
  		case PHY_INTERFACE_MODE_RGMII_ID:
-@@ -316,8 +297,7 @@ static void mtk_mac_config(struct phylin
+@@ -327,8 +308,7 @@ static void mtk_mac_config(struct phylin
  					goto err_phy;
  			} else {
  				mtk_gmac0_rgmii_adjust(mac->hw,
@@ -6207,7 +6262,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  
  				/* mt7623_pad_clk_setup */
  				for (i = 0 ; i < NUM_TRGMII_CTRL; i++)
-@@ -351,14 +331,10 @@ static void mtk_mac_config(struct phylin
+@@ -362,14 +342,10 @@ static void mtk_mac_config(struct phylin
  		}
  
  		/* put the gmac into the right mode */
@@ -6222,7 +6277,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  	}
  
  	/* SGMII */
-@@ -367,67 +343,24 @@ static void mtk_mac_config(struct phylin
+@@ -378,67 +354,24 @@ static void mtk_mac_config(struct phylin
  		/* The path GMAC to SGMII will be enabled once the SGMIISYS is
  		 * being setup done.
  		 */
@@ -6298,7 +6353,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  
  	return;
  
-@@ -441,6 +374,35 @@ init_err:
+@@ -452,6 +385,35 @@ init_err:
  		mac->id, phy_modes(state->interface), err);
  }
  
@@ -6334,7 +6389,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  static void mtk_mac_pcs_get_state(struct phylink_config *config,
  				  struct phylink_link_state *state)
  {
-@@ -484,14 +446,91 @@ static void mtk_mac_an_restart(struct ph
+@@ -495,14 +457,91 @@ static void mtk_mac_an_restart(struct ph
  static void mtk_mac_link_down(struct phylink_config *config, unsigned int mode,
  			      phy_interface_t interface)
  {
@@ -6428,7 +6483,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  static void mtk_mac_link_up(struct phylink_config *config,
  			    struct phy_device *phy,
  			    unsigned int mode, phy_interface_t interface,
-@@ -499,10 +538,10 @@ static void mtk_mac_link_up(struct phyli
+@@ -510,10 +549,10 @@ static void mtk_mac_link_up(struct phyli
  {
  	struct mtk_mac *mac = container_of(config, struct mtk_mac,
  					   phylink_config);
@@ -6442,7 +6497,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  }
  
  static void mtk_validate(struct phylink_config *config,
-@@ -592,6 +631,10 @@ static void mtk_validate(struct phylink_
+@@ -603,6 +642,10 @@ static void mtk_validate(struct phylink_
  }
  
  static const struct phylink_mac_ops mtk_phylink_ops = {
@@ -6453,7 +6508,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  	.validate = mtk_validate,
  	.mac_pcs_get_state = mtk_mac_pcs_get_state,
  	.mac_an_restart = mtk_mac_an_restart,
-@@ -3471,6 +3514,51 @@ static int mtk_add_mac(struct mtk_eth *e
+@@ -3561,6 +3604,51 @@ static int mtk_add_mac(struct mtk_eth *e
  
  	mac->phylink_config.dev = &eth->netdev[id]->dev;
  	mac->phylink_config.type = PHYLINK_NETDEV;
@@ -6505,7 +6560,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  
  	phylink = phylink_create(&mac->phylink_config,
  				 of_fwnode_handle(mac->of_node),
-@@ -3506,6 +3594,7 @@ free_netdev:
+@@ -3631,6 +3719,7 @@ free_netdev:
  	return err;
  }
  
@@ -6513,7 +6568,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  static int mtk_probe(struct platform_device *pdev)
  {
  	struct device_node *mac_np;
-@@ -3571,7 +3660,6 @@ static int mtk_probe(struct platform_dev
+@@ -3696,7 +3785,6 @@ static int mtk_probe(struct platform_dev
  			return PTR_ERR(eth->infra);
  		}
  	}
@@ -6521,7 +6576,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  	if (MTK_HAS_CAPS(eth->soc->caps, MTK_SGMII)) {
  		eth->sgmii = devm_kzalloc(eth->dev, sizeof(*eth->sgmii),
  					  GFP_KERNEL);
-@@ -3579,7 +3667,7 @@ static int mtk_probe(struct platform_dev
+@@ -3704,7 +3792,7 @@ static int mtk_probe(struct platform_dev
  			return -ENOMEM;
  
  		err = mtk_sgmii_init(eth->sgmii, pdev->dev.of_node,
@@ -6530,10 +6585,10 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.c
  
  		if (err)
  			return err;
-Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+Index: linux-5.4.284/drivers/net/ethernet/mediatek/mtk_eth_soc.h
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/mediatek/mtk_eth_soc.h
-+++ linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
+--- linux-5.4.284.orig/drivers/net/ethernet/mediatek/mtk_eth_soc.h
++++ linux-5.4.284/drivers/net/ethernet/mediatek/mtk_eth_soc.h
 @@ -109,6 +109,11 @@
  #define MTK_GDMA_TO_PDMA	0x0
  #define MTK_GDMA_DROP_ALL	0x7777
@@ -6546,7 +6601,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  /* Unicast Filter MAC Address Register - Low */
  #define MTK_GDMA_MAC_ADRL(x)	(0x508 + (x * 0x1000))
  
-@@ -586,6 +591,14 @@
+@@ -589,6 +594,14 @@
  #define PHY_IAC_TIMEOUT		HZ
  
  #define MTK_MAC_MISC		0x1000c
@@ -6561,7 +6616,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  #define MTK_MUX_TO_ESW		BIT(0)
  
  /* Mac control registers */
-@@ -595,6 +608,7 @@
+@@ -598,6 +611,7 @@
  #define MAC_MCR_FORCE_MODE	BIT(15)
  #define MAC_MCR_TX_EN		BIT(14)
  #define MAC_MCR_RX_EN		BIT(13)
@@ -6569,7 +6624,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  #define MAC_MCR_BACKOFF_EN	BIT(9)
  #define MAC_MCR_BACKPR_EN	BIT(8)
  #define MAC_MCR_FORCE_RX_FC	BIT(5)
-@@ -649,6 +663,21 @@
+@@ -652,6 +666,21 @@
  #define INTF_MODE_RGMII_1000    (TRGMII_MODE | TRGMII_CENTRAL_ALIGNED)
  #define INTF_MODE_RGMII_10_100  0
  
@@ -6591,7 +6646,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  /* GPIO port control registers for GMAC 2*/
  #define GPIO_OD33_CTRL8		0x4c0
  #define GPIO_BIAS_CTRL		0xed0
-@@ -1032,81 +1061,161 @@ struct mtk_napi {
+@@ -1035,81 +1064,161 @@ struct mtk_napi {
  };
  
  enum mkt_eth_capabilities {
@@ -6810,7 +6865,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  
  #define MTK_GMAC1_RGMII		(MTK_ETH_PATH_GMAC1_RGMII | MTK_RGMII)
  #define MTK_GMAC1_TRGMII	(MTK_ETH_PATH_GMAC1_TRGMII | MTK_TRGMII)
-@@ -1114,7 +1221,12 @@ enum mkt_eth_capabilities {
+@@ -1117,7 +1226,12 @@ enum mkt_eth_capabilities {
  #define MTK_GMAC2_RGMII		(MTK_ETH_PATH_GMAC2_RGMII | MTK_RGMII)
  #define MTK_GMAC2_SGMII		(MTK_ETH_PATH_GMAC2_SGMII | MTK_SGMII)
  #define MTK_GMAC2_GEPHY		(MTK_ETH_PATH_GMAC2_GEPHY | MTK_GEPHY)
@@ -6823,7 +6878,22 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  
  /* MUXes present on SoCs */
  /* 0: GDM1 -> GMAC1, 1: GDM1 -> ESW */
-@@ -1181,11 +1293,21 @@ struct mtk_tx_dma_desc_info {
+@@ -1164,12 +1278,12 @@ enum mkt_eth_capabilities {
+ 
+ #define MT7986_CAPS   (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII | \
+                        MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA | \
+-                       MTK_NETSYS_V2 | MTK_NETSYS_RX_V2 | MTK_RSTCTRL_PPE1)
++			MTK_RSTCTRL_PPE1 | MTK_NETSYS_RX_V2)
+ 
+ #define MT7981_CAPS   (MTK_GMAC1_SGMII | MTK_GMAC2_SGMII | MTK_GMAC2_GEPHY | \
+ 			MTK_MUX_GMAC12_TO_GEPHY_SGMII | MTK_QDMA | \
+ 			MTK_MUX_U3_GMAC2_TO_QPHY | MTK_U3_COPHY_V2 | \
+-			MTK_NETSYS_V2 | MTK_RSTCTRL_PPE1)
++			MTK_RSTCTRL_PPE1 | MTK_SRAM)
+ 
+ /* struct mtk_eth_data -	This is the structure holding all differences
+  *				among various plaforms
+@@ -1184,11 +1298,21 @@ struct mtk_tx_dma_desc_info {
   */
  struct mtk_soc_data {
  	u32             ana_rgc3;
@@ -6847,7 +6917,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  };
  
  /* currently no SoC has more than 2 macs */
-@@ -1270,6 +1392,7 @@ struct mtk_eth {
+@@ -1285,6 +1412,7 @@ struct mtk_eth {
  	unsigned long			sysclk;
  	struct regmap			*ethsys;
  	struct regmap                   *infra;
@@ -6855,7 +6925,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  	struct mtk_sgmii                *sgmii;
  	struct regmap			*pctl;
  	bool				hwlro;
-@@ -1319,6 +1442,8 @@ struct mtk_mac {
+@@ -1335,6 +1463,8 @@ struct mtk_mac {
  	struct mtk_hw_stats		*hw_stats;
  	__be32				hwlro_ip[MTK_MAX_LRO_IP_CNT];
  	int				hwlro_ip_cnt;
@@ -6864,7 +6934,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  };
  
  /* the struct describing the SoC. these are declared in the soc_xyz.c files */
-@@ -1333,7 +1458,7 @@ u32 mtk_r32(struct mtk_eth *eth, unsigne
+@@ -1349,7 +1479,7 @@ u32 mtk_r32(struct mtk_eth *eth, unsigne
  u32 mtk_m32(struct mtk_eth *eth, u32 mask, u32 set, unsigned reg);
  
  int mtk_sgmii_init(struct mtk_sgmii *ss, struct device_node *np,
@@ -6873,7 +6943,7 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
  int mtk_sgmii_setup_mode_an(struct mtk_sgmii *ss, unsigned int id);
  int mtk_sgmii_setup_mode_force(struct mtk_sgmii *ss, unsigned int id,
  			       const struct phylink_link_state *state);
-@@ -1346,4 +1471,37 @@ void mtk_gdm_config(struct mtk_eth *eth
+@@ -1362,4 +1492,37 @@ void mtk_gdm_config(struct mtk
  void ethsys_reset(struct mtk_eth *eth, u32 reset_bits);
  int mtk_soc_extphy_init(struct mtk_eth *eth, int addr);
  int mtk_mdio_busy_wait(struct mtk_eth *eth);
@@ -6911,10 +6981,10 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_eth_soc.h
 +}
 +
  #endif /* MTK_ETH_H */
-Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_sgmii.c
+Index: linux-5.4.284/drivers/net/ethernet/mediatek/mtk_sgmii.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/ethernet/mediatek/mtk_sgmii.c
-+++ linux-5.4.211/drivers/net/ethernet/mediatek/mtk_sgmii.c
+--- linux-5.4.284.orig/drivers/net/ethernet/mediatek/mtk_sgmii.c
++++ linux-5.4.284/drivers/net/ethernet/mediatek/mtk_sgmii.c
 @@ -10,12 +10,305 @@
  #include <linux/mfd/syscon.h>
  #include <linux/of.h>
@@ -7250,10 +7320,10 @@ Index: linux-5.4.211/drivers/net/ethernet/mediatek/mtk_sgmii.c
  	}
  
  	return 0;
-Index: linux-5.4.211/drivers/net/phy/phylink.c
+Index: linux-5.4.284/drivers/net/phy/phylink.c
 ===================================================================
---- linux-5.4.211.orig/drivers/net/phy/phylink.c
-+++ linux-5.4.211/drivers/net/phy/phylink.c
+--- linux-5.4.284.orig/drivers/net/phy/phylink.c
++++ linux-5.4.284/drivers/net/phy/phylink.c
 @@ -19,10 +19,19 @@
  #include <linux/spinlock.h>
  #include <linux/timer.h>
@@ -7384,10 +7454,10 @@ Index: linux-5.4.211/drivers/net/phy/phylink.c
  	if (mac_ops->mac_select_pcs &&
  	    mac_ops->mac_select_pcs(config, PHY_INTERFACE_MODE_NA) !=
  	      ERR_PTR(-EOPNOTSUPP))
-Index: linux-5.4.211/drivers/of/address.c
+Index: linux-5.4.284/drivers/of/address.c
 ===================================================================
---- linux-5.4.211.orig/drivers/of/address.c
-+++ linux-5.4.211/drivers/of/address.c
+--- linux-5.4.284.orig/drivers/of/address.c
++++ linux-5.4.284/drivers/of/address.c
 @@ -993,14 +993,16 @@ out:
  }
  EXPORT_SYMBOL_GPL(of_dma_get_range);
@@ -7426,10 +7496,10 @@ Index: linux-5.4.211/drivers/of/address.c
 -EXPORT_SYMBOL_GPL(of_dma_is_coherent);
 +EXPORT_SYMBOL_GPL(of_dma_is_coherent);
 \ No newline at end of file
-Index: linux-5.4.211/include/linux/phylink.h
+Index: linux-5.4.284/include/linux/phylink.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/phylink.h
-+++ linux-5.4.211/include/linux/phylink.h
+--- linux-5.4.284.orig/include/linux/phylink.h
++++ linux-5.4.284/include/linux/phylink.h
 @@ -360,6 +360,8 @@ struct phylink_pcs {
  struct phylink_pcs_ops {
  	int (*pcs_validate)(struct phylink_pcs *pcs, unsigned long *supported,
@@ -7448,11 +7518,11 @@ Index: linux-5.4.211/include/linux/phylink.h
  };
  
  int pcs_enable(struct phylink_pcs *pcs);
-Index: linux-5.4.211/include/linux/regmap.h
+Index: linux-5.4.284/include/linux/regmap.h
 ===================================================================
---- linux-5.4.211.orig/include/linux/regmap.h
-+++ linux-5.4.211/include/linux/regmap.h
-@@ -1062,6 +1062,19 @@ static inline bool regmap_reg_in_range(u
+--- linux-5.4.284.orig/include/linux/regmap.h
++++ linux-5.4.284/include/linux/regmap.h
+@@ -1081,6 +1081,19 @@ static inline bool regmap_reg_in_range(u
  	return reg >= range->range_min && reg <= range->range_max;
  }
  
@@ -7472,10 +7542,282 @@ Index: linux-5.4.211/include/linux/regmap.h
  bool regmap_reg_in_ranges(unsigned int reg,
  			  const struct regmap_range *ranges,
  			  unsigned int nranges);
-Index: linux-5.4.211/include/net/dsa.h
+Index: linux-5.4.284/include/linux/soc/mediatek/mtk_wed.h
 ===================================================================
---- linux-5.4.211.orig/include/net/dsa.h
-+++ linux-5.4.211/include/net/dsa.h
+--- linux-5.4.284.orig/include/linux/soc/mediatek/mtk_wed.h
++++ linux-5.4.284/include/linux/soc/mediatek/mtk_wed.h
+@@ -5,16 +5,63 @@
+ #include <linux/rcupdate.h>
+ #include <linux/regmap.h>
+ #include <linux/pci.h>
++#include <linux/skbuff.h>
++#include <linux/netdevice.h>
+ 
+ #define MTK_WED_TX_QUEUES		2
++#define MTK_WED_RX_QUEUES		2
++
++#define WED_WO_STA_REC			0x6
+ 
+ struct mtk_wed_hw;
+ struct mtk_wdma_desc;
+ 
++enum mtk_wed_wo_cmd {
++	MTK_WED_WO_CMD_WED_CFG,
++	MTK_WED_WO_CMD_WED_RX_STAT,
++	MTK_WED_WO_CMD_RRO_SER,
++	MTK_WED_WO_CMD_DBG_INFO,
++	MTK_WED_WO_CMD_DEV_INFO,
++	MTK_WED_WO_CMD_BSS_INFO,
++	MTK_WED_WO_CMD_STA_REC,
++	MTK_WED_WO_CMD_DEV_INFO_DUMP,
++	MTK_WED_WO_CMD_BSS_INFO_DUMP,
++	MTK_WED_WO_CMD_STA_REC_DUMP,
++	MTK_WED_WO_CMD_BA_INFO_DUMP,
++	MTK_WED_WO_CMD_FBCMD_Q_DUMP,
++	MTK_WED_WO_CMD_FW_LOG_CTRL,
++	MTK_WED_WO_CMD_LOG_FLUSH,
++	MTK_WED_WO_CMD_CHANGE_STATE,
++	MTK_WED_WO_CMD_CPU_STATS_ENABLE,
++	MTK_WED_WO_CMD_CPU_STATS_DUMP,
++	MTK_WED_WO_CMD_EXCEPTION_INIT,
++	MTK_WED_WO_CMD_PROF_CTRL,
++	MTK_WED_WO_CMD_STA_BA_DUMP,
++	MTK_WED_WO_CMD_BA_CTRL_DUMP,
++	MTK_WED_WO_CMD_RXCNT_CTRL,
++	MTK_WED_WO_CMD_RXCNT_INFO,
++	MTK_WED_WO_CMD_SET_CAP,
++	MTK_WED_WO_CMD_CCIF_RING_DUMP,
++	MTK_WED_WO_CMD_WED_END
++};
++
++struct mtk_rxbm_desc {
++	__le32 buf0;
++	__le32 token;
++} __packed __aligned(4);
++
++enum mtk_wed_bus_tye {
++	MTK_WED_BUS_PCIE,
++	MTK_WED_BUS_AXI,
++};
++
++#define MTK_WED_RING_CONFIGURED		BIT(0)
+ struct mtk_wed_ring {
+ 	struct mtk_wdma_desc *desc;
+ 	dma_addr_t desc_phys;
++	u32 desc_size;
+ 	int size;
++	u32 flags;
+ 
+ 	u32 reg_base;
+ 	void __iomem *wpdma;
+@@ -20,7 +67,95 @@ struct mtk_wed_ring {
+ 	void __iomem *wpdma;
+ };
+ 
++struct mtk_wed_wo_rx_stats {
++	__le16 wlan_idx;
++	__le16 tid;
++	__le32 rx_pkt_cnt;
++	__le32 rx_byte_cnt;
++	__le32 rx_err_cnt;
++	__le32 rx_drop_cnt;
++};
++
+ struct mtk_wed_device {
++#ifdef CONFIG_NET_MEDIATEK_SOC_WED
++	const struct mtk_wed_ops *ops;
++	struct device *dev;
++	struct mtk_wed_hw *hw;
++	bool init_done, running;
++	int wdma_idx;
++	int irq;
++	u8 version;
++
++	/* used by wlan driver */
++	u32 rev_id;
++
++	struct mtk_wed_ring tx_ring[MTK_WED_TX_QUEUES];
++	struct mtk_wed_ring rx_ring[MTK_WED_RX_QUEUES];
++	struct mtk_wed_ring txfree_ring;
++	struct mtk_wed_ring tx_wdma[MTK_WED_TX_QUEUES];
++	struct mtk_wed_ring rx_wdma[MTK_WED_RX_QUEUES];
++
++	struct {
++		int size;
++		void **pages;
++		struct mtk_wdma_desc *desc;
++		dma_addr_t desc_phys;
++	} tx_buf_ring;
++
++	struct {
++		int size;
++		struct page_frag_cache rx_page;
++		struct mtk_rxbm_desc *desc;
++		dma_addr_t desc_phys;
++	} rx_buf_ring;
++
++	struct {
++		struct mtk_wed_ring ring;
++		dma_addr_t miod_phys;
++		dma_addr_t fdbk_phys;
++	} rro;
++
++	/* filled by driver: */
++	struct {
++		union {
++			struct platform_device *platform_dev;
++			struct pci_dev *pci_dev;
++		};
++		enum mtk_wed_bus_tye bus_type;
++		void __iomem *base;
++		u32 phy_base;
++
++		u32 wpdma_phys;
++		u32 wpdma_int;
++		u32 wpdma_mask;
++		u32 wpdma_tx;
++		u32 wpdma_txfree;
++		u32 wpdma_rx_glo;
++		u32 wpdma_rx;
++
++		bool wcid_512;
++
++		u16 token_start;
++		unsigned int nbuf;
++		unsigned int rx_nbuf;
++		unsigned int rx_npkt;
++		unsigned int rx_size;
++
++		u8 tx_tbit[MTK_WED_TX_QUEUES];
++		u8 rx_tbit[MTK_WED_RX_QUEUES];
++		u8 txfree_tbit;
++
++		u32 (*init_buf)(void *ptr, dma_addr_t phys, int token_id);
++		int (*offload_enable)(struct mtk_wed_device *wed);
++		void (*offload_disable)(struct mtk_wed_device *wed);
++		u32 (*init_rx_buf)(struct mtk_wed_device *wed, int size);
++		void (*release_rx_buf)(struct mtk_wed_device *wed);
++		void (*update_wo_rx_stats)(struct mtk_wed_device *wed,
++					   struct mtk_wed_wo_rx_stats *stats);
++		int (*reset)(struct mtk_wed_device *wed);
++		void (*reset_complete)(struct mtk_wed_device *wed);
++	} wlan;
++#endif
+ };
+ 
+ struct mtk_wed_ops {
+@@ -26,10 +161,16 @@ struct mtk_wed_ops {
+ struct mtk_wed_ops {
+ 	int (*attach)(struct mtk_wed_device *dev);
+ 	int (*tx_ring_setup)(struct mtk_wed_device *dev, int ring,
+-			     void __iomem *regs);
++			     void __iomem *regs, bool reset);
++	int (*rx_ring_setup)(struct mtk_wed_device *dev, int ring,
++			     void __iomem *regs, bool reset);
+ 	int (*txfree_ring_setup)(struct mtk_wed_device *dev,
+ 				 void __iomem *regs);
++	int (*msg_update)(struct mtk_wed_device *dev, int cmd_id,
++			  void *data, int len);
+ 	void (*detach)(struct mtk_wed_device *dev);
++	void (*ppe_check)(struct mtk_wed_device *dev, struct sk_buff *skb,
++			  u32 reason, u32 hash);
+ 
+ 	void (*stop)(struct mtk_wed_device *dev);
+ 	void (*start)(struct mtk_wed_device *dev, u32 irq_mask);
+@@ -40,6 +181,8 @@ struct mtk_wed_ops {
+ 
+ 	u32 (*irq_get)(struct mtk_wed_device *dev, u32 mask);
+ 	void (*irq_set_mask)(struct mtk_wed_device *dev, u32 mask);
++	int (*setup_tc)(struct mtk_wed_device *wed, struct net_device *dev,
++			enum tc_setup_type type, void *type_data);
+ };
+ 
+ extern const struct mtk_wed_ops __rcu *mtk_soc_wed_ops;
+@@ -49,6 +192,18 @@ static inline int
+ {
+ 	int ret = -ENODEV;
+ 
++#ifdef CONFIG_NET_MEDIATEK_SOC_WED
++	rcu_read_lock();
++	dev->ops = rcu_dereference(mtk_soc_wed_ops);
++	if (dev->ops)
++		ret = dev->ops->attach(dev);
++	else
++		rcu_read_unlock();
++
++	if (ret)
++		dev->ops = NULL;
++#endif
++
+ 	return ret;
+ }
+ 
+@@ -55,9 +210,40 @@ static inline bool
+ static inline bool
+ mtk_wed_get_rx_capa(struct mtk_wed_device *dev)
+ {
++#ifdef CONFIG_NET_MEDIATEK_SOC_WED
++	return dev->version != 1;
++#else
+ 	return false;
++#endif
+ }
+ 
++#ifdef CONFIG_NET_MEDIATEK_SOC_WED
++#define mtk_wed_device_active(_dev) !!(_dev)->ops
++#define mtk_wed_device_detach(_dev) (_dev)->ops->detach(_dev)
++#define mtk_wed_device_start(_dev, _mask) (_dev)->ops->start(_dev, _mask)
++#define mtk_wed_device_tx_ring_setup(_dev, _ring, _regs, _reset) \
++	(_dev)->ops->tx_ring_setup(_dev, _ring, _regs, _reset)
++#define mtk_wed_device_txfree_ring_setup(_dev, _regs) \
++	(_dev)->ops->txfree_ring_setup(_dev, _regs)
++#define mtk_wed_device_reg_read(_dev, _reg) \
++	(_dev)->ops->reg_read(_dev, _reg)
++#define mtk_wed_device_reg_write(_dev, _reg, _val) \
++	(_dev)->ops->reg_write(_dev, _reg, _val)
++#define mtk_wed_device_irq_get(_dev, _mask) \
++	(_dev)->ops->irq_get(_dev, _mask)
++#define mtk_wed_device_irq_set_mask(_dev, _mask) \
++	(_dev)->ops->irq_set_mask(_dev, _mask)
++#define mtk_wed_device_rx_ring_setup(_dev, _ring, _regs, _reset) \
++	(_dev)->ops->rx_ring_setup(_dev, _ring, _regs, _reset)
++#define mtk_wed_device_ppe_check(_dev, _skb, _reason, _hash) \
++	(_dev)->ops->ppe_check(_dev, _skb, _reason, _hash)
++#define mtk_wed_device_update_msg(_dev, _id, _msg, _len) \
++	(_dev)->ops->msg_update(_dev, _id, _msg, _len)
++#define mtk_wed_device_stop(_dev) (_dev)->ops->stop(_dev)
++#define mtk_wed_device_dma_reset(_dev) (_dev)->ops->reset_dma(_dev)
++#define mtk_wed_device_setup_tc(_dev, _netdev, _type, _type_data) \
++	(_dev)->ops->setup_tc(_dev, _netdev, _type, _type_data)
++#else
+ static inline bool mtk_wed_device_active(struct mtk_wed_device *dev)
+ {
+ 	return false;
+@@ -64,14 +250,18 @@ static inline bool mtk_wed_device_active(struct
+ }
+ #define mtk_wed_device_detach(_dev) do {} while (0)
+ #define mtk_wed_device_start(_dev, _mask) do {} while (0)
+-#define mtk_wed_device_tx_ring_setup(_dev, _ring, _regs) -ENODEV
++#define mtk_wed_device_tx_ring_setup(_dev, _ring, _regs, _reset) -ENODEV
+ #define mtk_wed_device_txfree_ring_setup(_dev, _ring, _regs) -ENODEV
+ #define mtk_wed_device_reg_read(_dev, _reg) 0
+ #define mtk_wed_device_reg_write(_dev, _reg, _val) do {} while (0)
+ #define mtk_wed_device_irq_get(_dev, _mask) 0
+ #define mtk_wed_device_irq_set_mask(_dev, _mask) do {} while (0)
+-#define mtk_wed_device_rx_ring_setup(_dev, _ring, _regs) -ENODEV
++#define mtk_wed_device_rx_ring_setup(_dev, _ring, _regs, _reset) -ENODEV
+ #define mtk_wed_device_ppe_check(_dev, _skb, _reason, _hash)  do {} while (0)
+ #define mtk_wed_device_update_msg(_dev, _id, _msg, _len) -ENODEV
++#define mtk_wed_device_stop(_dev) do {} while (0)
++#define mtk_wed_device_dma_reset(_dev) do {} while (0)
++#define mtk_wed_device_setup_tc(_dev, _netdev, _type, _type_data) -EOPNOTSUPP
++#endif
+ 
+ #endif
+Index: linux-5.4.284/include/net/dsa.h
+===================================================================
+--- linux-5.4.284.orig/include/net/dsa.h
++++ linux-5.4.284/include/net/dsa.h
 @@ -369,6 +369,9 @@ typedef int dsa_fdb_dump_cb_t(const unsi
  	enum dsa_tag_protocol (*get_tag_protocol)(struct dsa_switch *ds,
  						  int port,
@@ -7486,10 +7828,10 @@ Index: linux-5.4.211/include/net/dsa.h
  
  	int	(*setup)(struct dsa_switch *ds);
  	void	(*teardown)(struct dsa_switch *ds);
-Index: linux-5.4.211/net/dsa/port.c
+Index: linux-5.4.284/net/dsa/port.c
 ===================================================================
---- linux-5.4.211.orig/net/dsa/port.c
-+++ linux-5.4.211/net/dsa/port.c
+--- linux-5.4.284.orig/net/dsa/port.c
++++ linux-5.4.284/net/dsa/port.c
 @@ -484,6 +484,20 @@ void dsa_port_phylink_mac_pcs_get_state(
  }
  EXPORT_SYMBOL_GPL(dsa_port_phylink_mac_pcs_get_state);
