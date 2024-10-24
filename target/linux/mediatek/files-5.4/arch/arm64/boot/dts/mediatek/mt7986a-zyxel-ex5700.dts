@@ -6,49 +6,42 @@
 #include <dt-bindings/leds/common.h>
 
 / {
-	model = "Zyxel EX5700";
- 	compatible = "zyxel,ex5700", "mediatek,mt7986a";
+	model = "ZyXEL EX5700 Telenor";
+	compatible = "zyxel,ex5700", "mediatek,mt7986a";
 
 	chosen {
 		bootargs = "console=ttyS0,115200n1 loglevel=8  \
 				earlycon=uart8250,mmio32,0x11002000";
 	};
-	
+
 	aliases {
-		led-boot = &led_status_green;
-		led-failsafe = &led_status_green;
+		led-boot = &led_status_white;
+		led-failsafe = &led_status_amber;
 		led-running = &led_status_green;
-		led-upgrade = &led_status_amber;
+		led-upgrade = &led_status_red;
 	};
 
 	memory {
 		reg = <0 0x40000000 0 0x40000000>;
 	};
 
-	gsw: gsw@0 {
-		compatible = "mediatek,mt753x";
-		mediatek,ethsys = <&ethsys>;
-		#address-cells = <1>;
-		#size-cells = <0>;
-	};
-
 	gpio-keys {
- 		compatible = "gpio-keys";
+		compatible = "gpio-keys";
 		poll-interval = <20>;
 
 		reset-button {
 			label = "reset";
-			gpios = <&pio 9 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_RESTART>;
+			gpios = <&pio 9 GPIO_ACTIVE_LOW>;
 		};
 
 		wps-button {
 			label = "wps";
-			gpios = <&pio 10 GPIO_ACTIVE_LOW>;
 			linux,code = <KEY_WPS_BUTTON>;
+			gpios = <&pio 10 GPIO_ACTIVE_LOW>;
 		};
- 	};
-	
+	};
+
 	leds {
 		compatible = "gpio-leds";
 
@@ -67,12 +60,12 @@
 			gpios = <&pio 29 GPIO_ACTIVE_HIGH>;
 		};
 
-		white2 {
+		led_status_white: white2 {
 			label = "white:status";
 			gpios = <&pio 16 GPIO_ACTIVE_HIGH>;
 		};
 
-		red2 {
+		led_status_red: red2 {
 			label = "red:status";
 			gpios = <&pio 17 GPIO_ACTIVE_HIGH>;
 		};
@@ -90,6 +83,7 @@
 
 	nmbm_spim_nand {
 		compatible = "generic,nmbm";
+
 		#address-cells = <1>;
 		#size-cells = <1>;
 
@@ -104,6 +98,7 @@
 			partition@0 {
 				label = "BL2";
 				reg = <0x00 0x100000>;
+				read-only;
 			};
 
 			partition@100000 {
@@ -123,7 +118,7 @@
 
 			partition@580000 {
 				label = "ubi";
-				reg = <0x00580000 0x1da80000>;
+				reg = <0x580000 0x1da80000>;
 			};
 		};
 	};
@@ -167,7 +162,7 @@
 			speed = <2500>;
 			full-duplex;
 			pause;
-		};	
+		};
 	};
 
 	gmac1: mac@1 {
@@ -180,7 +175,6 @@
 			full-duplex;
 			pause;
 		};
-
 	};
 
 	mdio: mdio-bus {
@@ -190,64 +184,85 @@
 		phy5: phy@5 {
 			compatible = "ethernet-phy-id67c9.de0a";
 			phy-mode = "2500base-x";
+
 			reset-gpios = <&pio 6 GPIO_ACTIVE_LOW>;
 			reset-assert-us = <50000>;
 			reset-deassert-us = <20000>;
-			maxlinear,led-reg = <0x3c0 0x330 0x0 0x0>;
+			maxlinear,led-reg = <1008 192 0 0>; /* led0 pulsing TX RX, led1 link 10/100m Con off link 1000/2500m Con on */
 			reg = <5>;
+			ifname = "lan4";
 		};
 
 		phy6: phy@6 {
 			compatible = "ethernet-phy-id67c9.de0a";
 			phy-mode = "2500base-x";
-			maxlinear,led-reg = <0x3c0 0x330 0x0 0x0>;
+			maxlinear,led-reg = <1008 192 0 0>; /* led0 pulsing TX RX, led1 link 10/100m Con off link 1000/2500m Con on */
 			reg = <6>;
+			ifname = "eth1";		
 		};
-	};
-};
 
-&gsw {
-	mediatek,mdio = <&mdio>;
-	mediatek,portmap = "lllll";
-	mediatek,mdio_master_pinmux = <1>;
-	reset-gpios = <&pio 5 GPIO_ACTIVE_HIGH>;
-	interrupt-parent = <&pio>;
-	interrupts = <66 IRQ_TYPE_LEVEL_HIGH>;
-	status = "okay";
+		switch@0 {
+			compatible = "mediatek,mt7531";
+			reg = <31>;
+			reset-gpios = <&pio 5 0>;
 
-	port5: port@5 {
-		compatible = "mediatek,mt753x-port";
-		reg = <5>;
-		phy-mode = "sgmii";
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
 
-		fixed-link {
-			speed = <2500>;
-			full-duplex;
-			pause;
-		};
-	};
+				port@0 {
+					reg = <0>;
+					label = "lan3";
+				};
 
-	port6: port@6 {
-		compatible = "mediatek,mt753x-port";
-		/* mediatek,ssc-on; */
-		reg = <6>;
-		phy-mode = "sgmii";
-		fixed-link {
-			speed = <2500>;
-			full-duplex;
+				port@1 {
+					reg = <1>;
+					label = "lan2";
+				};
+
+				port@2 {
+					reg = <2>;
+					label = "lan1";
+				};
+
+				port@5 {
+					reg = <5>;
+					label = "lan4";
+					phy-mode = "2500base-x";
+
+					fixed-link {
+						speed = <2500>;
+						full-duplex;
+						pause;
+					};
+				};
+
+				port@6 {
+					reg = <6>;
+					label = "cpu";
+					ethernet = <&gmac0>;
+					phy-mode = "2500base-x";
+
+					fixed-link {
+						speed = <2500>;
+						full-duplex;
+						pause;
+					};
+				};
+			};
 		};
 	};
 };
 
 &xhci {
- 	vusb33-supply = <&reg_3p3v>;
- 	vbus-supply = <&usb_vbus>;
- 	status = "okay";
+	vusb33-supply = <&reg_3p3v>;
+	vbus-supply = <&usb_vbus>;
+	status = "okay";
 };
 
 &hnat {
 	mtketh-wan = "eth1";
-	mtketh-lan = "eth0";
+	mtketh-lan = "lan";
 	mtketh-max-gmac = <2>;
 	status = "okay";
 };
@@ -271,7 +286,7 @@
 	status = "okay";
 	cs-gpios = <0>, <0>;
 
-	spi_nand: spi_nand@0 {
+	spi_nand: spi_nand@1 {
 		#address-cells = <1>;
 		#size-cells = <1>;
 		compatible = "spi-nand";
@@ -279,12 +294,6 @@
 		spi-max-frequency = <52000000>;
 		spi-tx-bus-width = <4>;
 		spi-rx-bus-width = <4>;
-		spi-cal-enable;
-		spi-cal-mode = "read-data";
-		spi-cal-datalen = <7>;
-		spi-cal-data = /bits/ 8 <0x53 0x50 0x49 0x4E 0x41 0x4E 0x44>; /* 'SPINAND' */
-		spi-cal-addrlen = <5>;
-		spi-cal-addr = /bits/ 32 <0x0 0x0 0x0 0x0 0x0>;
 	};
 };
 
@@ -313,12 +322,12 @@
 		};
 		conf {
 			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-				   "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-				   "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-				   "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-				   "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-				   "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-				   "WF1_TOP_CLK", "WF1_TOP_DATA";
+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
 			drive-strength = <MTK_DRIVE_4mA>;
 		};
 	};
@@ -330,12 +339,12 @@
 		};
 		conf {
 			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-				   "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-				   "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-				   "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-				   "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-				   "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-				   "WF1_TOP_CLK", "WF1_TOP_DATA";
+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
 			drive-strength = <MTK_DRIVE_4mA>;
 		};
 	};
