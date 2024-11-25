@@ -156,6 +156,7 @@ platform_do_upgrade() {
 		;;
 	bananapi,bpi-r3mini-emmc |\
 	glinet,gl-mt6000 |\
+ 	lunzn,s20p |\
 	jdcloud,re-cp-03 |\
 	*emmc*)
  		CI_KERNPART="kernel"
@@ -183,6 +184,7 @@ platform_check_image() {
 	ruijie,rg-x60-pro* |\
 	*snand* |\
 	glinet,gl-mt6000 |\
+  	lunzn,s20p |\
 	jdcloud,re-cp-03 |\
 	tplink,tl-xdr608* |\
 	zyxel,ex5700 |\
