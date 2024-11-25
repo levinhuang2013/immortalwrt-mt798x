@@ -490,6 +490,20 @@ define Device/glinet_gl-mt6000
 endef
 TARGET_DEVICES += glinet_gl-mt6000
 
+define Device/lunzn_s20p
+  DEVICE_VENDOR := LUNZN
+  DEVICE_MODEL := S20P
+  DEVICE_DTS := mt7986a-lunzn-s20p
+  DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
+  SUPPORTED_DEVICES := lunzn,s20p
+  DEVICE_PACKAGES := $(MT7986_USB_PKGS) blkid blockdev e2fsprogs f2fsck fdisk \
+		     losetup mkf2fs kmod-fs-ext4 kmod-mmc kmod-fs-f2fs \
+		     kmod-fs-vfat kmod-nls-cp437 kmod-nls-iso8859-1
+  IMAGE/factory.bin := append-kernel | pad-to 32M | append-rootfs
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+endef
+TARGET_DEVICES += lunzn_s20p
+
 define Device/ruijie-rg-x60-pro-stock
   DEVICE_VENDOR := Ruijie
   DEVICE_MODEL := Ruijie RG-X60 Pro (Stock)
