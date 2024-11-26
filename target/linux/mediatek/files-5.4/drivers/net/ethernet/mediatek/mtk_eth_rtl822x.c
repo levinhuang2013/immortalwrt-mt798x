@@ -159,7 +159,18 @@ static int rtl822x_init(struct mtk_eth *eth, int addr)
 	mtk_mmd_write(eth, addr, 7, 0, val);
 
 	msleep(500);
-    	
+
+	// led0 at 10/100/1000/2.5G
+	mtk_mmd_write(eth, addr, 31, 0xd032, 0x0027);
+	// led1 at 10/100/1000/2.5G
+	mtk_mmd_write(eth, addr, 31, 0xd034, 0x0027);
+	// led on time = 400ms, duty = 12.5%, freq = 60ms, Enable 10M LPI, modeA, led0 act on, led1 act off
+	mtk_mmd_write(eth, addr, 31, 0xd040, 0x321d);
+	// all led enable, polar = low
+	// mtk_mmd_write(eth, addr, 31, 0xd044, 0xf8);
+
+	msleep(500);
+
 	dev_info(eth->dev, "RTL822x init success!\n");
 
 	Rtl8226b_phy_init((HANDLE){eth, addr}, NULL, 1);
