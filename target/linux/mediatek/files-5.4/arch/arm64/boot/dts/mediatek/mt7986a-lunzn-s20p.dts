@@ -6,7 +6,7 @@
 #include <dt-bindings/leds/common.h>
 / {
 	model = "LUNZN S20P";
-	compatible = "lunzn,s20p", "mediatek,mt7986a";
+	compatible = "lunzn,s20p", "mediatek,mt7986a-emmc-rfb";
 	chosen {
 		bootargs = "console=ttyS0,115200n1 loglevel=8 \
 			    earlycon=uart8250,mmio32,0x11002000 \
@@ -14,14 +14,14 @@
 	};
 
 	aliases {
-		led-boot = &green_led;
-		led-failsafe = &green_led;
-		led-running = &green_led;
-		led-upgrade = &green_led;
+		led-boot = &led_sys;
+		led-failsafe = &led_sys;
+		led-running = &led_sys;
+		led-upgrade = &led_sys;
 	};
 
 	memory {
-		reg = <0 0x40000000 0 0x40000000>;
+		reg = <0 0x40000000 0 0x80000000>;
 	};
 
 	gpio-keys {
@@ -37,8 +37,18 @@
 	gpio-leds {
 		compatible = "gpio-leds";
 
-		green_led: green_led {
-			label = "green";
+		led_wlan5g: led_wlan5g {
+			label = "wlan5g";
+			gpios = <&pio 2 GPIO_ACTIVE_LOW>;
+		};
+
+		led_wlan2g: led_wlan2g {
+			label = "wlan2g";
+			gpios = <&pio 1 GPIO_ACTIVE_LOW>;
+		};
+
+		led_sys: led_sys {
+			label = "sys";
 			gpios = <&pio 22 GPIO_ACTIVE_LOW>;
 		};
 	};
@@ -108,7 +118,7 @@
 		phy5: phy@5 {
 			compatible = "ethernet-phy-ieee802.3-c45";
 			reg = <5>;
-			ifname = "lan5";
+			ifname = "lan6";
 		};
 		
 		phy7: phy@7 {
@@ -128,32 +138,32 @@
 
 				port@0 {
 					reg = <0>;
-					label = "lan0";
+					label = "lan5";
 				};
 
 				port@1 {
 					reg = <1>;
-					label = "lan1";
+					label = "lan4";
 				};
 
 				port@2 {
 					reg = <2>;
-					label = "lan2";
+					label = "lan3";
 				};
 
 				port@3 {
 					reg = <3>;
-					label = "lan3";
+					label = "lan2";
 				};
 
 				port@4 {
 					reg = <4>;
-					label = "lan4";
+					label = "lan1";
 				};
 
 				port@5 {
 					reg = <5>;
-					label = "lan5";
+					label = "lan6";
 					phy-mode = "2500base-x";
 					phy-handle = <&phy5>;
 
@@ -186,6 +196,8 @@
 	mtketh-lan = "lan";
 	mtketh-max-gmac = <2>;
 	status = "okay";
+	ext-devices-prefix = "usb\0wwan";
+	ext-devices = "wwan0_0\0wwan0_1\0wwan0.1\0wwan0.2";
 };
 
 &mmc0 {
