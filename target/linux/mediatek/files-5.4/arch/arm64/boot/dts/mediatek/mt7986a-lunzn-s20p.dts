@@ -41,16 +41,6 @@
 			label = "wlan5g";
 			gpios = <&pio 2 GPIO_ACTIVE_LOW>;
 		};
-
-		led_wlan2g: led_wlan2g {
-			label = "wlan2g";
-			gpios = <&pio 1 GPIO_ACTIVE_LOW>;
-		};
-
-		led_sys: led_sys {
-			label = "sys";
-			gpios = <&pio 22 GPIO_ACTIVE_LOW>;
-		};
 	};
 
 	reg_1p8v: regulator-1p8v {
