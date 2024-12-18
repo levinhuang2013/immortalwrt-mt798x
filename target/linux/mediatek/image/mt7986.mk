@@ -498,7 +498,6 @@ define Device/lunzn_s20p
   SUPPORTED_DEVICES := lunzn,s20p
   DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) mkf2fs e2fsprogs losetup mmc-utils f2fsck \
 		     f2fs-tools kmod-nvme kmod-mmc kmod-fs-f2fs kmod-scsi-generic kmod-ata-ahci pciutils
-  IMAGE/factory.bin := append-kernel | pad-to 32M | append-rootfs
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
 TARGET_DEVICES += lunzn_s20p
