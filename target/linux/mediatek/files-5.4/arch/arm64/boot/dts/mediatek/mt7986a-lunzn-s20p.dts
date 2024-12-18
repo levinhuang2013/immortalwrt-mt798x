@@ -196,8 +196,8 @@
 	mtketh-lan = "lan";
 	mtketh-max-gmac = <2>;
 	status = "okay";
-	ext-devices-prefix = "usb\0wwan";
-	ext-devices = "wwan0_0\0wwan0_1\0wwan0.1\0wwan0.2";
+	ext-devices-prefix = "usb", "wwan";
+	ext-devices = "wwan0_0","wwan0_1","wwan0.1","wwan0.2";
 };
 
 &mmc0 {
@@ -293,6 +293,23 @@
 			drive-strength = <MTK_DRIVE_4mA>;
 		};
 	};
+
+	wf_dbdc_pins: wf_dbdc-pins {
+		mux {
+			function = "wifi";
+			groups = "wf_dbdc";
+		};
+		conf {
+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
+			drive-strength = <MTK_DRIVE_4mA>;
+		};
+	};
 };
 
 &uart0 {
@@ -314,8 +331,9 @@
 };
 
 &wbsys {
-	pinctrl-names = "default";
+	pinctrl-names = "default", "dbdc";
 	pinctrl-0 = <&wf_2g_5g_pins>;
+	pinctrl-1 = <&wf_dbdc_pins>;
 	status = "okay";
 };
 
