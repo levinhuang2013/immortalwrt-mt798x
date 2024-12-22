@@ -2,8 +2,8 @@
 #include "mt7981.dtsi"
 
 / {
-	model = "SL-3000 eMMC NOR";
-	compatible = "sl,3000", "mediatek,mt7981";
+	model = "SL-3000 NOR eMMC";
+	compatible = "sl,3000-nor", "mediatek,mt7981";
 
 	chosen {
 		bootargs = "console=ttyS0,115200n1 loglevel=8 \
@@ -32,39 +32,39 @@
 	};
 
 	leds {
-			compatible = "gpio-leds";
+		compatible = "gpio-leds";
 
-				rgb_red: led-0 {
-					label = "red:status";
-					gpios = <&pio 10 GPIO_ACTIVE_LOW>;
-				};
+		rgb_red: led-0 {
+			label = "red:status";
+			gpios = <&pio 10 GPIO_ACTIVE_LOW>;
+		};
 
-				rgb_green: led-1 {
-					label = "green:status";
-					gpios = <&pio 11 GPIO_ACTIVE_LOW>;
-				};
+		rgb_green: led-1 {
+			label = "green:status";
+			gpios = <&pio 11 GPIO_ACTIVE_LOW>;
+		};
 
-				rgb_blue: led-2 {
-					label = "blue:status";
-					gpios = <&pio 12 GPIO_ACTIVE_LOW>;
-				};
+		rgb_blue: led-2 {
+			label = "blue:status";
+			gpios = <&pio 12 GPIO_ACTIVE_LOW>;
+		};
 	};
 
 	gpio-keys {
-			compatible = "gpio-keys";
+		compatible = "gpio-keys";
 
-				reset {
-					label = "reset";
-					linux,code = <KEY_RESTART>;
-					gpios = <&pio 1 GPIO_ACTIVE_LOW>;
-				};
+		reset {
+			label = "reset";
+			linux,code = <KEY_RESTART>;
+			gpios = <&pio 1 GPIO_ACTIVE_LOW>;
+		};
 
-				wps {
-					label = "wps";
-					gpios = <&pio 0 GPIO_ACTIVE_LOW>;
-					linux,code = <BTN_9>;
-					linux,input-type = <EV_SW>;
-				};
+		wps {
+			label = "wps";
+			gpios = <&pio 0 GPIO_ACTIVE_LOW>;
+			linux,code = <BTN_9>;
+			linux,input-type = <EV_SW>;
+		};
 	};
 
 	gsw: gsw@0 {
