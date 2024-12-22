@@ -219,6 +219,8 @@ platform_do_upgrade() {
 		;;
 	cmcc,rax3000m-emmc |\
 	cmcc,xr30-emmc |\
+  	sl,3000-nor |\
+ 	sl,3000-emmc |\
 	*emmc*)
 		CI_KERNPART="kernel"
 		CI_ROOTPART="rootfs"
@@ -269,6 +271,7 @@ platform_check_image() {
 	*newland,nl-wr8103* |\
 	newland,nl-wr9103 |\
 	nradio,wt9103 |\
+ 	sl,3000* |\
 	*snand* |\
 	*emmc* |\
 	routerich,ax3000)
