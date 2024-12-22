@@ -765,6 +765,7 @@ setup_model()
 	newland,nl-wr9103 |\
 	nradio,wt9103 |\
 	ruijie,rg-x30e* |\
+ 	sl,3000* |\
 	*7981*)
 		MT7981_whnat $num_of_wifi $usbnet
 		;;
