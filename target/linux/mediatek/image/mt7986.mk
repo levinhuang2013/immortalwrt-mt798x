@@ -497,7 +497,7 @@ define Device/lunzn_s20p
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   SUPPORTED_DEVICES := lunzn,s20p
   DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) mkf2fs e2fsprogs losetup mmc-utils f2fsck \
-		     f2fs-tools kmod-nvme kmod-mmc kmod-fs-f2fs kmod-scsi-generic kmod-ata-ahci pciutils
+		     f2fs-tools kmod-nvme kmod-mmc kmod-fs-f2fs pciutils gdisk
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
 TARGET_DEVICES += lunzn_s20p
