@@ -219,8 +219,7 @@ platform_do_upgrade() {
 		;;
 	cmcc,rax3000m-emmc |\
 	cmcc,xr30-emmc |\
-  	sl,3000-nor |\
- 	sl,3000-emmc |\
+  	sl,3000* |\
 	*emmc*)
 		CI_KERNPART="kernel"
 		CI_ROOTPART="rootfs"
