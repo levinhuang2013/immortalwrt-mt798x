@@ -177,16 +177,16 @@ define Device/mt7981-fpga-sd
 endef
 TARGET_DEVICES += mt7981-fpga-sd
 
-define Device/sl_3000-nor-emmc
+define Device/sl_3000-nor
   DEVICE_VENDOR := SL
   DEVICE_MODEL := 3000-NOR
-  DEVICE_DTS := mt7981-sl-3000-nor-emmc
+  DEVICE_DTS := mt7981-sl-3000-nor
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   SUPPORTED_DEVICES := sl,3000-nor
   DEVICE_PACKAGES := f2fsck losetup mkf2fs kmod-fs-f2fs kmod-mmc
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
-TARGET_DEVICES += sl_3000-nor-emmc
+TARGET_DEVICES += sl_3000-nor
 
 define Device/sl_3000-emmc
   DEVICE_VENDOR := SL
