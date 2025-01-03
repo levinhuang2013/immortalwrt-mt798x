@@ -183,7 +183,7 @@ define Device/sl_3000-nor
   DEVICE_DTS := mt7981-sl-3000-nor
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   SUPPORTED_DEVICES := sl,3000-nor
-  DEVICE_PACKAGES := f2fsck losetup mkf2fs kmod-fs-f2fs kmod-mmc gdisk sgdisk fdisk
+  DEVICE_PACKAGES := f2fsck losetup mkf2fs kmod-fs-f2fs kmod-mmc gdisk sgdisk automount blkid blockdev fdisk
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
 TARGET_DEVICES += sl_3000-nor
@@ -194,7 +194,7 @@ define Device/sl_3000-emmc
   DEVICE_DTS := mt7981-sl-3000-emmc
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   SUPPORTED_DEVICES := sl,3000-emmc
-  DEVICE_PACKAGES := f2fsck losetup mkf2fs kmod-fs-f2fs kmod-mmc gdisk sgdisk fdisk
+  DEVICE_PACKAGES := f2fsck losetup mkf2fs kmod-fs-f2fs kmod-mmc gdisk sgdisk automount blkid blockdev fdisk
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
 TARGET_DEVICES += sl_3000-emmc
