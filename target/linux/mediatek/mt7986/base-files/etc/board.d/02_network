@@ -71,20 +71,25 @@ mediatek_setup_macs()
 		wan_mac=$(mtd_get_mac_binary "Factory" "0x24")
  		lan_mac=$(mtd_get_mac_binary "Factory" "0x2a")
  		label_mac=$lan_mac
- 		local b0dat="$(l1dat if2dat ra0)"
+		local b0dat="$(l1dat if2dat ra0)"
  		local b1dat="$(l1dat if2dat rax0)"
  		local b2dat="$(l1dat if2dat rai0)"
- 		if [ -f ${b0dat} ] && ! grep -q "MacAddress=" ${b0dat}; then
+ 		local b3dat="$(l1dat if2dat ray0)"
+		if [ -f ${b0dat} ] && ! grep -q "MacAddress=" ${b0dat}; then
 			local b0mac="$wifi_mac"
 			echo "MacAddress=$b0mac" >> ${b0dat}
- 		fi
+		fi
 		if [ -f ${b1dat} ] && ! grep -q "MacAddress=" ${b1dat}; then
-			local b1mac="$(macaddr_add $wifi_mac 1)"
+			local b1mac="$(macaddr_add $wifi_mac 2)"
 			echo "MacAddress=$b1mac" >> ${b1dat}
 		fi
  		if [ -f ${b2dat} ] && ! grep -q "MacAddress=" ${b2dat}; then
-			local b2mac="$(macaddr_add $wifi_mac 2)"
+			local b2mac="$(macaddr_add $wifi_mac -2)"
 			echo "MacAddress=$b1mac" >> ${b2dat}
+ 		fi
+ 		if [ -f ${b3dat} ] && ! grep -q "MacAddress=" ${b3dat}; then
+			local b3mac="$(macaddr_setbit_la $b2mac)"
+			echo "MacAddress=$b1mac" >> ${b3dat}
  		fi
  		;;
 	glinet,gl-mt6000)
