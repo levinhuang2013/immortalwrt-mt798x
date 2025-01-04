@@ -85,11 +85,11 @@ mediatek_setup_macs()
 		fi
 		if [ -f ${b2dat} ] && ! grep -q "MacAddress=" ${b2dat}; then
 			local b2mac="$(macaddr_add $wifi_mac -2)"
-			echo "MacAddress=$b1mac" >> ${b2dat}
+			echo "MacAddress=$b2mac" >> ${b2dat}
 		fi
 		if [ -f ${b3dat} ] && ! grep -q "MacAddress=" ${b3dat}; then
 			local b3mac="$(macaddr_setbit_la $b2mac)"
-			echo "MacAddress=$b1mac" >> ${b3dat}
+			echo "MacAddress=$b3mac" >> ${b3dat}
 		fi
 		;;
 	glinet,gl-mt6000)
