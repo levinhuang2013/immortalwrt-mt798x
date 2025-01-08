@@ -4,11 +4,9 @@
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/leds/common.h>
-
 / {
 	model = "ZyXEL EX5700";
 	compatible = "zyxel,ex5700", "mediatek,mt7986a";
-
 	chosen {
 		bootargs = "console=ttyS0,115200n1 loglevel=8  \
 				earlycon=uart8250,mmio32,0x11002000";
@@ -265,6 +263,8 @@
 	mtketh-lan = "lan";
 	mtketh-max-gmac = <2>;
 	status = "okay";
+	ext-devices-prefix = "usb", "wwan";
+	ext-devices = "wwan0_0","wwan0_1","wwan0.1","wwan0.2";
 };
 
 &pcie0 {
