@@ -541,7 +541,7 @@ define Device/zyxel_ex5700
     DEVICE_DTS := mt7986a-zyxel-ex5700
     SUPPORTED_DEVICES := zyxel,ex5700
     DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
-    DEVICE_PACKAGES := $(MT7986_USB_PKGS)
+    DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) sgdisk luci-app-samba4
     UBINIZE_OPTS := -E 5
     BLOCKSIZE := 256k
     PAGESIZE := 4096
