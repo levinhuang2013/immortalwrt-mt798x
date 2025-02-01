@@ -70,7 +70,7 @@ define Device/sx-7981r128
   DEVICE_MODEL := 7981R128
   DEVICE_DTS := mt7981-spim-nand-7981r128
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
-  DEVICE_PACKAGES := $(MT7981_USB_PKGS) luci-app-samba4 kmod-sfp sgdisk kmod-nvme kmod-scsi-generic kmod-ata-ahci
+  DEVICE_PACKAGES := $(MT7981_USB_PKGS) kmod-sfp sgdisk kmod-scsi-generic kmod-ata-ahci
   SUPPORTED_DEVICES := sx,7981r128
   UBINIZE_OPTS := -E 5
   BLOCKSIZE := 128k
