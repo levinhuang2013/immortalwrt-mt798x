@@ -1,6 +1,6 @@
 KERNEL_LOADADDR := 0x48080000
 
-MT7981_USB_PKGS := automount blkid blockdev fdisk kmod-nls-cp437 kmod-nls-iso8859-1 kmod-usb2 kmod-usb3 kmod-usb-net-rndis usbutils
+MT7981_USB_PKGS := automount blkid blockdev fdisk kmod-nls-cp437 kmod-nls-iso8859-1 kmod-usb2 kmod-usb3 usbutils
 
 define Device/mt7981-spim-nor-rfb
   DEVICE_VENDOR := MediaTek
