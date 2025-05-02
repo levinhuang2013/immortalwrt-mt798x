@@ -70,7 +70,7 @@
 		regulator-boot-on;
 		regulator-always-on;
 	};
-	
+
 	usb_vbus: regulator-usb-vbus {
 		compatible = "regulator-fixed";
 		regulator-name = "usb_vbus";
@@ -90,12 +90,12 @@
 		reg = <0>;
 		phy-mode = "2500base-x";
 		ext-phy-reg = <5>;
-		ext-phy-reset-gpios = <&pio 48 0>;
+		ext-phy-reset-gpios = <&pio 48 GPIO_ACTIVE_HIGH>;
 		fixed-link {
 			speed = <2500>;
 			full-duplex;
 			pause;
-		};	
+		};
 	};
 
 	gmac1: mac@1 {
@@ -103,7 +103,7 @@
 		reg = <1>;
 		phy-mode = "2500base-x";
 		ext-phy-reg = <7>;
-		ext-phy-reset-gpios = <&pio 6 0>;	
+		ext-phy-reset-gpios = <&pio 6 GPIO_ACTIVE_HIGH>;
 		fixed-link {
 			speed = <2500>;
 			full-duplex;
@@ -118,19 +118,17 @@
 		phy5: phy@5 {
 			compatible = "ethernet-phy-ieee802.3-c45";
 			reg = <5>;
-			ifname = "lan6";
 		};
-		
+
 		phy7: phy@7 {
 			compatible = "ethernet-phy-ieee802.3-c45";
 			reg = <7>;
-			ifname = "eth1";
 		};
 
 		switch@0 {
 			compatible = "mediatek,mt7531";
 			reg = <31>;
-			reset-gpios = <&pio 5 0>;
+			reset-gpios = <&pio 5 GPIO_ACTIVE_HIGH>;
 
 			ports {
 				#address-cells = <1>;
@@ -165,7 +163,6 @@
 					reg = <5>;
 					label = "lan6";
 					phy-mode = "2500base-x";
-					phy-handle = <&phy5>;
 
 					fixed-link {
 						speed = <2500>;
