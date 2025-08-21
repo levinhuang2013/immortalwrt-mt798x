@@ -10,9 +10,9 @@ board_config_update
 
 case $board in
 zyxel,ex5700)
-	ucidef_set_led_netdev "wlan2g" "WLAN2G" "amber:net" "rai0" "tx rx"
-	ucidef_set_led_netdev "wlan5g" "WLAN5G" "green:net" "rax0" "tx rx"
-	ucidef_set_led_netdev "wlan6g" "WLAN6G" "red:net" "raix0" "tx rx"
+	ucidef_set_led_netdev "wlan2g" "WLAN2G" "amber:net" "rai0" "link"
+	ucidef_set_led_netdev "wlan5g" "WLAN5G" "green:net" "rax0" "link"
+	ucidef_set_led_netdev "wlan6g" "WLAN6G" "red:net" "ray0" "link"
 	;;
 esac
 
