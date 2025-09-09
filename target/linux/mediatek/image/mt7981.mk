@@ -390,7 +390,7 @@ TARGET_DEVICES += xiaomi_mi-router-wr30u-stock
 
 define Device/xiaomi_mi-router-wr30u-112m
   DEVICE_VENDOR := Xiaomi
-  DEVICE_MODEL := Mi Router WR30U (112M UBI layout)
+  DEVICE_MODEL := WR30U
   DEVICE_DTS := mt7981-xiaomi-mi-router-wr30u-112m
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   UBINIZE_OPTS := -E 5
