@@ -324,10 +324,10 @@ define KernelPackage/mt_wifi/install
 rm -rf $(1)/lib/firmware/; \
 $(INSTALL_DIR) $(1)/lib/firmware/; \
 if [ "$$(CONFIG_MTK_CHIP_MT7986)" = "y" ] ; then \
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/mt7986/rebb/MT7986_* $(1)/lib/firmware/; \
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/mt7986/rebb/MT7986_*_EEPROM_AX7800.bin $(1)/lib/firmware/; \
 fi ; \
 if [ "$$(CONFIG_MTK_CHIP_MT7916)" = "y" ] ; then \
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/mt7916/rebb/MT7916_* $(1)/lib/firmware/; \
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/mt7916/rebb/MT7916_EEPROM_AX3000_ePAeLNA_2G_6G_* $(1)/lib/firmware/; \
 fi ; \
 if [ "$$(CONFIG_MTK_CHIP_MT7981)" = "y" ] ; then \
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/bin/mt7981/rebb/MT7981_* $(1)/lib/firmware/; \
