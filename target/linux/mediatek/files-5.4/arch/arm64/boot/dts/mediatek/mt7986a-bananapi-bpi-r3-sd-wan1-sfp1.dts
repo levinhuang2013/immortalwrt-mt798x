@@ -6,53 +6,129 @@
 #include <dt-bindings/leds/common.h>
 #include "mt7986-spim-nand-partition-sd-emmc-boot.dtsi"
 / {
-	model = "Bananapi BPI-R3";
+	model = "Bananapi BPI-R3 SD";
 	compatible = "bananapi,bpi-r3-sd", "mediatek,mt7986a";
 	chosen {
 		bootargs = "console=ttyS0,115200n1 loglevel=8  \
 		earlycon=uart8250,mmio32,0x11002000 \
-		earlyprintk block2mtd.block2mtd=/dev/mmcblk0,65536 mtdparts=mmcblk0:4608K(BL2)ro,2M(RF),2M(FIP)ro,32M(Kernel),1024M(rootfs),2048M(usrdata),-(bmtpool) rootfstype=squashfs,jffs2";
+		root=PARTLABEL=rootfs rootwait rootfstype=squashfs,f2fs";
 	};
 
 	memory {
 		reg = <0 0x40000000 0 0x80000000>;
 	};
 
-        reg_1p8v: regulator-1p8v {
-                compatible = "regulator-fixed";
-                regulator-name = "fixed-1.8V";
-                regulator-min-microvolt = <1800000>;
-                regulator-max-microvolt = <1800000>;
-                regulator-boot-on;
-                regulator-always-on;
-        };
+       gpio-keys {
+		compatible = "gpio-keys";
 
-        reg_3p3v: regulator-3p3v {
-                compatible = "regulator-fixed";
-                regulator-name = "fixed-3.3V";
-                regulator-min-microvolt = <3300000>;
-                regulator-max-microvolt = <3300000>;
-                regulator-boot-on;
-                regulator-always-on;
-        };
+		reset {
+ 			label = "reset";
+ 			linux,code = <KEY_RESTART>;
+ 			gpios = <&pio 9 GPIO_ACTIVE_LOW>;
+ 		};
 
-        usb_vbus: regulator-usb-vbus {
-                compatible = "regulator-fixed";
-                regulator-name = "usb_vbus";
-                regulator-min-microvolt = <5000000>;
-                regulator-max-microvolt = <5000000>;
-                gpios = <&pio 17 GPIO_ACTIVE_HIGH>;
-                enable-active-high;
-                regulator-boot-on;
-        };
+ 		wps {
+ 			label = "wps";
+ 			linux,code = <KEY_WPS_BUTTON>;
+ 			gpios = <&pio 10 GPIO_ACTIVE_LOW>;
+ 		};
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		green_led: led-0 {
+			color = <LED_COLOR_ID_GREEN>;
+			function = LED_FUNCTION_POWER;
+			gpios = <&pio 69 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
+		};
+
+		blue_led: led-1 {
+			color = <LED_COLOR_ID_BLUE>;
+			function = LED_FUNCTION_STATUS;
+			gpios = <&pio 86 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
+		};
+	};
+
+	/* i2c of the left SFP cage (wan) */
+	i2c_sfp1: i2c-gpio-0 {
+		compatible = "i2c-gpio";
+		sda-gpios = <&pio 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+		scl-gpios = <&pio 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+		i2c-gpio,delay-us = <2>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+	};
+
+	/* i2c of the right SFP cage (lan) */
+	i2c_sfp2: i2c-gpio-1 {
+		compatible = "i2c-gpio";
+		sda-gpios = <&pio 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+		scl-gpios = <&pio 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+		i2c-gpio,delay-us = <2>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+	};
+
+	/* left SFP cage (wan) */
+	sfp1: sfp-1 {
+		compatible = "sff,sfp";
+		i2c-bus = <&i2c_sfp1>;
+		los-gpios = <&pio 46 GPIO_ACTIVE_HIGH>;
+		maximum-power-milliwatt = <3000>;
+		mod-def0-gpios = <&pio 49 GPIO_ACTIVE_LOW>;
+		tx-disable-gpios = <&pio 20 GPIO_ACTIVE_HIGH>;
+		tx-fault-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
+	};
+
+	/* right SFP cage (lan) */
+	sfp2: sfp-2 {
+		compatible = "sff,sfp";
+		i2c-bus = <&i2c_sfp2>;
+		los-gpios = <&pio 31 GPIO_ACTIVE_HIGH>;
+		mod-def0-gpios = <&pio 47 GPIO_ACTIVE_LOW>;
+		maximum-power-milliwatt = <3000>;
+		tx-disable-gpios = <&pio 15 GPIO_ACTIVE_HIGH>;
+		tx-fault-gpios = <&pio 48 GPIO_ACTIVE_HIGH>;
+	};
+
+	reg_1p8v: regulator-1p8v {
+		compatible = "regulator-fixed";
+		regulator-name = "fixed-1.8V";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-boot-on;
+		regulator-always-on;
+	};
+
+	reg_3p3v: regulator-3p3v {
+		compatible = "regulator-fixed";
+		regulator-name = "fixed-3.3V";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-boot-on;
+		regulator-always-on;
+	};
+
+	usb_vbus: regulator-usb-vbus {
+		compatible = "regulator-fixed";
+		regulator-name = "usb_vbus";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpios = <&pio 17 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-boot-on;
+	};
 
 	sound {
 		compatible = "mediatek,mt7986-wm8960-machine";
 		mediatek,platform = <&afe>;
 		audio-routing = "Headphone", "HP_L",
-				"Headphone", "HP_R",
-				"LINPUT1", "AMIC",
-				"RINPUT1", "AMIC";
+			"Headphone", "HP_R",
+			"LINPUT1", "AMIC",
+			"RINPUT1", "AMIC";
 		mediatek,audio-codec = <&wm8960>;
 		status = "okay";
 	};
@@ -118,12 +194,8 @@
 		compatible = "mediatek,eth-mac";
 		reg = <1>;
 		phy-mode = "2500base-x";
-
-		fixed-link {
-			speed = <2500>;
-			full-duplex;
-			pause;
-		};
+		managed = "in-band-status";
+		sfp = <&sfp1>;
 	};
 
 	mdio: mdio-bus {
@@ -182,12 +254,8 @@
 					reg = <5>;
 					label = "lan5";
 					phy-mode = "2500base-x";
-
-					fixed-link {
-						speed = <2500>;
-						full-duplex;
-						pause;
-					};
+					managed = "in-band-status";
+					sfp = <&sfp2>;
 				};
 
 				port@6 {
@@ -208,7 +276,7 @@
 };
 
 &hnat {
-	mtketh-wan = "eth1";
+	mtketh-wan = "wan";
 	mtketh-lan = "lan";
 	mtketh-max-gmac = <2>;
 	status = "okay";
@@ -248,16 +316,17 @@
 };
 
 &mmc0 {
-        pinctrl-names = "default", "state_uhs";
-        pinctrl-0 = <&mmc0_pins_default>;
-        pinctrl-1 = <&mmc0_pins_uhs>;
-        bus-width = <4>;
-        max-frequency = <52000000>;
-        cap-sd-highspeed;
-	r_smpl = <1>;
-        vmmc-supply = <&reg_3p3v>;
-        vqmmc-supply = <&reg_3p3v>;
-        status = "okay";
+	pinctrl-names = "default", "state_uhs";
+	pinctrl-0 = <&mmc0_pins_default>;
+	pinctrl-1 = <&mmc0_pins_uhs>;
+	bus-width = <4>;
+	max-frequency = <52000000>;
+	cap-sd-highspeed;
+	vmmc-supply = <&reg_3p3v>;
+	vqmmc-supply = <&reg_3p3v>;
+	no-mmc;
+	no-sdio;
+	status = "okay";
 };
 
 &pcie0 {
