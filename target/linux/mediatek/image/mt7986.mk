@@ -457,9 +457,9 @@ define Device/BPI-R3-SD-WAN1-SFP1
   DEVICE_DTS := mt7986a-bananapi-bpi-r3-sd-wan1-sfp1
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   SUPPORTED_DEVICES := bananapi,bpi-r3-sd
-  DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) mkf2fs e2fsprogs losetup \
-		      kmod-fs-ext4 kmod-mmc mmc-utils kmod-fs-f2fs f2fsck kmod-fs-vfat \
-		       kmod-sfp sgdisk kmod-nvme pciutils kmod-fuse
+  DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) kmod-fs-ext4 kmod-fs-vfat \
+        kmod-nvme kmod-sfp kmod-scsi-generic kmod-ata-ahci sgdisk pciutils kmod-fuse \
+        f2fsck losetup mkf2fs f2fs-tools kmod-fs-f2fs kmod-mmc automount mmc-utils
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
 TARGET_DEVICES += BPI-R3-SD-WAN1-SFP1
@@ -485,8 +485,9 @@ define Device/BPI-R3-NOR-WAN1-SFP1
   DEVICE_DTS := mt7986a-bananapi-bpi-r3-nor-wan1-sfp1
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   SUPPORTED_DEVICES := bananapi,bpi-r3-nor
-  DEVICE_PACKAGES := $(MT7986_USB_PKGS) mkf2fs e2fsprogs kmod-fs-vfat \
-		       kmod-sfp sgdisk kmod-nvme pciutils kmod-fuse
+  DEVICE_PACKAGES := automount blkid blockdev fdisk kmod-usb3 usbutils mkf2fs \
+		     e2fsprogs losetup kmod-fs-ext4 kmod-fs-f2fs f2fsck kmod-fs-vfat kmod-sfp \
+		     sgdisk kmod-nvme pciutils mmc-utils
 endef
 TARGET_DEVICES += BPI-R3-NOR-WAN1-SFP1
 
@@ -497,12 +498,12 @@ define Device/BPI-R3-NAND-WAN1-SFP1
   DEVICE_DTS := mt7986a-bananapi-bpi-r3-nand-wan1-sfp1
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   SUPPORTED_DEVICES := bananapi,bpi-r3-nand
-  DEVICE_PACKAGES := $(MT7986_USB_PKGS) mkf2fs e2fsprogs kmod-fs-vfat \
-		       kmod-sfp sgdisk kmod-nvme pciutils kmod-fuse
+  DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) mkf2fs e2fsprogs \
+		     kmod-fs-vfat kmod-sfp sgdisk kmod-nvme pciutils kmod-fuse mmc-utils
   UBINIZE_OPTS := -E 5
   BLOCKSIZE := 128k
   PAGESIZE := 2048
-  IMAGE_SIZE := 65536k
+  IMAGE_SIZE := 117248k
   KERNEL_IN_UBI := 1
   IMAGES += factory.bin
   IMAGE/factory.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
