@@ -32,10 +32,7 @@ mediatek_setup_interfaces()
 	bananapi,bpi-r3mini*)
 		ucidef_set_interfaces_lan_wan "eth0" "eth1"
 		;;
-	bananapi,bpi-r3-sd |\
-	bananapi,bpi-r3-emmc |\
-	bananapi,bpi-r3-nor |\
-	bananapi,bpi-r3-nand)
+	bananapi,bpi-r3-*)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4 lan5" "lan0 eth1"
 		;;
 	netcore,n60 |\
@@ -79,33 +76,12 @@ mediatek_setup_macs()
 		local wifi_mac="$(mtd_get_mac_binary Factory 0x04)"
 		wan_mac=$(macaddr_add $wifi_mac -2)
 		lan_mac=$(macaddr_add $wifi_mac -1)
-		label_mac=$wan_mac
-		local b0dat="$(l1dat if2dat ra0)"
-		local b1dat="$(l1dat if2dat rax0)"
-		if [ -f ${b0dat} ] && ! grep -q "MacAddress=" ${b0dat}; then
-			local b0mac="$(mmc_get_mac_binary factory 0x04)"
-			echo "MacAddress=$b0mac" >> ${b0dat}
-		fi
-		if [ -f ${b1dat} ] && ! grep -q "MacAddress=" ${b1dat}; then
-			local b1mac="$(macaddr_setbit_la $b0mac)"
-			echo "MacAddress=$b1mac" >> ${b1dat}
-		fi
 		;;
 	bananapi,bpi-r3-sd |\
 	bananapi,bpi-r3-emmc)
-		local label_mac="$(mmc_get_mac_binary factory 0x04)"
-		wan_mac=$(macaddr_add $label_mac -2)
-		lan_mac=$(macaddr_add $label_mac -1)
-		local b0dat="$(l1dat if2dat ra0)"
-		local b1dat="$(l1dat if2dat rax0)"
-		if [ -f ${b0dat} ] && ! grep -q "MacAddress=" ${b0dat}; then
-			local b0mac="$(mmc_get_mac_binary factory 0x04)"
-			echo "MacAddress=$b0mac" >> ${b0dat}
-		fi
-		if [ -f ${b1dat} ] && ! grep -q "MacAddress=" ${b1dat}; then
-			local b1mac="$(macaddr_setbit_la $b0mac)"
-			echo "MacAddress=$b1mac" >> ${b1dat}
-		fi
+		local wifi_mac="$(mmc_get_mac_binary factory 0x04)"
+		wan_mac=$(macaddr_add $label_mac 2)
+		lan_mac=$(macaddr_add $label_mac 1)
 		;;
 	glinet,gl-mt6000)
  		label_mac=$(mmc_get_mac_binary factory 0x0a)
