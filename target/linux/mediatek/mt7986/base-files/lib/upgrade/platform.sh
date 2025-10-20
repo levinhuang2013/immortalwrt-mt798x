@@ -183,10 +183,7 @@ platform_check_image() {
 	case "$board" in
 	xiaomi,redmi-router-ax6000* |\
 	bananapi,bpi-r3mini* |\
-	bananapi,bpi-r3-nor |\
-	bananapi,bpi-r3-nand |\
-	bananapi,bpi-r3-emmc |\
-	bananapi,bpi-r3-sd |\
+	bananapi,bpi-r3-* |\
 	netcore,n60 |\
 	ruijie,rg-x60-pro* |\
 	*snand* |\
