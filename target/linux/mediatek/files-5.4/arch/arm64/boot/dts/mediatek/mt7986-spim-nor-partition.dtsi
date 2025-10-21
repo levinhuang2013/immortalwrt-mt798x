@@ -23,7 +23,7 @@
 			};
 			partition@180000 {
 				label = "firmware";
-				reg = <0x180000 0xE00000>;
+				reg = <0x180000 0x1E00000>;
 			};
 		};
 	};
