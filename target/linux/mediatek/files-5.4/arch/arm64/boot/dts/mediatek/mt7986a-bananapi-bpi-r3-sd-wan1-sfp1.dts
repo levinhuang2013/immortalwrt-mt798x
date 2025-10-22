@@ -4,7 +4,6 @@
 #include <dt-bindings/input/input.h>
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/leds/common.h>
-#include "mt7986-spim-nand-partition-sd-emmc-boot.dtsi"
 / {
 	model = "Bananapi BPI-R3 SD";
 	compatible = "bananapi,bpi-r3-sd", "mediatek,mt7986a";
@@ -53,7 +52,7 @@
 	};
 
 	/* i2c of the left SFP cage (wan) */
-	i2c_sfp1: i2c-gpio-0 {
+	i2c_sfp1: i2c-0 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&pio 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&pio 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
@@ -63,7 +62,7 @@
 	};
 
 	/* i2c of the right SFP cage (lan) */
-	i2c_sfp2: i2c-gpio-1 {
+	i2c_sfp2: i2c-1 {
 		compatible = "i2c-gpio";
 		sda-gpios = <&pio 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 		scl-gpios = <&pio 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
@@ -202,20 +201,6 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		phy5: phy@5 {
-			compatible = "ethernet-phy-id67c9.de0a";
-			reg = <5>;
-			reset-gpios = <&pio 6 1>;
-			reset-deassert-us = <20000>;
-			phy-mode = "2500base-x";
-		};
-
-		phy6: phy@6 {
-			compatible = "ethernet-phy-id67c9.de0a";
-			reg = <6>;
-			phy-mode = "2500base-x";
-		};
-
 		switch@0 {
 			compatible = "mediatek,mt7531";
 			reg = <31>;
@@ -336,7 +321,6 @@
 };
 
 &wbsys {
-	mediatek,mtd-eeprom = <&factory 0x0000>;
 	status = "okay";
 	pinctrl-names = "default", "dbdc";
 	pinctrl-0 = <&wf_2g_5g_pins>;
