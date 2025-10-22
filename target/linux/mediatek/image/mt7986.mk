@@ -459,7 +459,7 @@ define Device/BPI-R3-SD-WAN1-SFP1
   SUPPORTED_DEVICES := bananapi,bpi-r3-sd
   DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) kmod-fs-ext4 kmod-fs-vfat \
         kmod-nvme kmod-sfp kmod-scsi-generic kmod-ata-ahci sgdisk pciutils kmod-fuse \
-        f2fsck losetup mkf2fs f2fs-tools kmod-fs-f2fs kmod-mmc automount mmc-utils
+        f2fsck losetup mkf2fs f2fs-tools kmod-fs-f2fs kmod-mmc automount mmc-utils kmod-i2c-gpio
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
 TARGET_DEVICES += BPI-R3-SD-WAN1-SFP1
@@ -473,7 +473,7 @@ define Device/BPI-R3-EMMC-WAN1-SFP1
   SUPPORTED_DEVICES := bananapi,bpi-r3-emmc
   DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) mkf2fs e2fsprogs losetup \
 		      kmod-fs-ext4 kmod-mmc mmc-utils kmod-fs-f2fs f2fsck kmod-fs-vfat \
-		       kmod-sfp sgdisk kmod-nvme pciutils kmod-fuse
+		       kmod-sfp sgdisk kmod-nvme pciutils kmod-fuse kmod-i2c-gpio
   IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
 endef
 TARGET_DEVICES += BPI-R3-EMMC-WAN1-SFP1
@@ -487,7 +487,7 @@ define Device/BPI-R3-NOR-WAN1-SFP1
   SUPPORTED_DEVICES := bananapi,bpi-r3-nor
   DEVICE_PACKAGES := automount blkid blockdev fdisk kmod-usb3 usbutils mkf2fs \
 		     e2fsprogs losetup kmod-fs-ext4 kmod-fs-f2fs f2fsck kmod-fs-vfat kmod-sfp \
-		     sgdisk kmod-nvme pciutils mmc-utils
+		     sgdisk kmod-nvme pciutils mmc-utils kmod-i2c-gpio
 endef
 TARGET_DEVICES += BPI-R3-NOR-WAN1-SFP1
 
@@ -499,7 +499,7 @@ define Device/BPI-R3-NAND-WAN1-SFP1
   DEVICE_DTS_DIR := $(DTS_DIR)/mediatek
   SUPPORTED_DEVICES := bananapi,bpi-r3-nand
   DEVICE_PACKAGES := $(MT7986_USB_PKGS) $(MT7986_WWAN_PKGS) mkf2fs e2fsprogs \
-		     kmod-fs-vfat kmod-sfp sgdisk kmod-nvme pciutils kmod-fuse mmc-utils
+		     kmod-fs-vfat kmod-sfp sgdisk kmod-nvme pciutils kmod-fuse mmc-utils kmod-i2c-gpio
   UBINIZE_OPTS := -E 5
   BLOCKSIZE := 128k
   PAGESIZE := 2048
