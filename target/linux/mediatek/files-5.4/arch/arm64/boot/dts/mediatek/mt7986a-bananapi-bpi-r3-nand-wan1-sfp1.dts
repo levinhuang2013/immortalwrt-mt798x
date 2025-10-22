@@ -325,7 +325,6 @@
 };
 
 &wbsys {
-	mediatek,mtd-eeprom = <&factory 0x0000>;
 	status = "okay";
 	pinctrl-names = "default", "dbdc";
 	pinctrl-0 = <&wf_2g_5g_pins>;
