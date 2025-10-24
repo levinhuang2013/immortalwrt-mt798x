@@ -13,8 +13,8 @@
 	};
 
 	aliases {
-		led-boot = &green_led;
-		led-failsafe = &green_led;
+		led-boot = &blue_led;
+		led-failsafe = &blue_led;
 		led-running = &green_led;
 		led-upgrade = &green_led;
 	};
@@ -45,14 +45,14 @@
 		green_led: led-0 {
 			color = <LED_COLOR_ID_GREEN>;
 			function = LED_FUNCTION_POWER;
-			gpios = <&pio 69 GPIO_ACTIVE_HIGH>;
+			gpios = <&pio 69 GPIO_ACTIVE_LOW>;
 		};
 
 		blue_led: led-1 {
 			color = <LED_COLOR_ID_BLUE>;
 			function = LED_FUNCTION_STATUS;
-			gpios = <&pio 86 GPIO_ACTIVE_HIGH>;
-			default-state = "off";
+			gpios = <&pio 86 GPIO_ACTIVE_LOW>;
+
 		};
 
 		led_wlan2g: led_wlan2g {
