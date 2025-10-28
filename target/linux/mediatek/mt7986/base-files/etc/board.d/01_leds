@@ -13,10 +13,6 @@ xiaomi,redmi-router-ax6000*)
 	ucidef_set_led_default "status" "status" "rgb:status" "1"
 	ucidef_set_led_netdev "wan" "wan" "rgb:network" "eth1"
 	;;
-bananapi,bpi-r3-nand)
-	ucidef_set_led_netdev "wlan5g" "5G" "wlan5g" "rax0"
-	ucidef_set_led_netdev "wlan2g" "2.4G" "wlan2g" "ra0"
-	;;
 esac
 
 board_config_flush
