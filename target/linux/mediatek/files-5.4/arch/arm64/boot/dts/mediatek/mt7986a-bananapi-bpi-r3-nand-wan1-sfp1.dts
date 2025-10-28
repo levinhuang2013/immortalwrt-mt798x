@@ -12,13 +12,6 @@
 				earlycon=uart8250,mmio32,0x11002000";
 	};
 
-	aliases {
-		led-boot = &blue_led;
-		led-failsafe = &blue_led;
-		led-running = &green_led;
-		led-upgrade = &green_led;
-	};
-
 	memory {
 		reg = <0 0x40000000 0 0x80000000>;
 	};
@@ -45,24 +38,15 @@
 		green_led: led-0 {
 			color = <LED_COLOR_ID_GREEN>;
 			function = LED_FUNCTION_POWER;
-			gpios = <&pio 69 GPIO_ACTIVE_LOW>;
+			gpios = <&pio 69 GPIO_ACTIVE_HIGH>;
+			default-state = "on";
 		};
 
 		blue_led: led-1 {
 			color = <LED_COLOR_ID_BLUE>;
 			function = LED_FUNCTION_STATUS;
-			gpios = <&pio 86 GPIO_ACTIVE_LOW>;
-
-		};
-
-		led_wlan2g: led_wlan2g {
-			label = "wlan2g";
-			gpios = <&pio 1 GPIO_ACTIVE_LOW>;
-		};
-
-		led_wlan5g: led_wlan5g {
-			label = "wlan5g";
-			gpios = <&pio 2 GPIO_ACTIVE_LOW>;
+			gpios = <&pio 86 GPIO_ACTIVE_HIGH>;
+			default-state = "off";
 		};
 	};
 
