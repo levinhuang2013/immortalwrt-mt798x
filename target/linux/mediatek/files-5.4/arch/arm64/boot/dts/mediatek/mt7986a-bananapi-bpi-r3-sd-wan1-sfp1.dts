@@ -261,7 +261,7 @@
 };
 
 &hnat {
-	mtketh-wan = "wan";
+	mtketh-wan = "eth1";
 	mtketh-lan = "lan";
 	mtketh-max-gmac = <2>;
 	status = "okay";
@@ -279,8 +279,8 @@
 		compatible = "jedec,spi-nor";
 		reg = <0>;
 		spi-max-frequency = <20000000>;
-		spi-tx-buswidth = <4>;
-		spi-rx-buswidth = <4>;
+		spi-tx-bus-width = <4>;
+		spi-rx-bus-width = <4>;
 	};
 
 	spi_nand: spi_nand@1 {
@@ -288,9 +288,9 @@
 		#size-cells = <1>;
 		compatible = "spi-nand";
 		reg = <1>;
-		spi-max-frequency = <20000000>;
-		spi-tx-buswidth = <4>;
-		spi-rx-buswidth = <4>;
+		spi-max-frequency = <52000000>;
+		spi-tx-bus-width = <4>;
+		spi-rx-bus-width = <4>;
 	};
 };
 
