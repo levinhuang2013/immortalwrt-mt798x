@@ -110,14 +110,13 @@
 		regulator-always-on;
 	};
 
-	usb_vbus: regulator-usb-vbus {
+	reg_5v: regulator-5v {
 		compatible = "regulator-fixed";
-		regulator-name = "usb_vbus";
+		regulator-name = "fixed-5V";
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
-		gpios = <&pio 17 GPIO_ACTIVE_HIGH>;
-		enable-active-high;
 		regulator-boot-on;
+		regulator-always-on;
 	};
 
 	sound {
@@ -253,7 +252,7 @@
 
 				port@0 {
 					reg = <0>;
-					label = "lan0";
+					label = "wan";
 				};
 
 				port@1 {
@@ -302,12 +301,10 @@
 };
 
 &hnat {
-	mtketh-wan = "eth1";
+	mtketh-wan = "wan";
 	mtketh-lan = "lan";
 	mtketh-max-gmac = <2>;
 	status = "okay";
-	ext-devices-prefix = "usb", "wwan";
-	ext-devices = "wwan0_0","wwan0_1","wwan0.1","wwan0.2";
 };
 
 &spi0 {
@@ -376,7 +373,7 @@
 
 &xhci {
  	vusb33-supply = <&reg_3p3v>;
- 	vbus-supply = <&usb_vbus>;
+ 	vbus-supply = <&reg_5v>;
  	status = "okay";
 };
 
