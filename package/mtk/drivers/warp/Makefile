@@ -63,7 +63,7 @@ define KernelPackage/warp/install
 	if [ "$$(CONFIG_WARP_CHIPSET)" = "mt7981" ]; then \
 		cp $(PKG_BUILD_DIR)/bin/7981*WOCPU*_RAM_CODE_release.bin $(1)/lib/firmware/; \
 	elif [ "$$(CONFIG_WARP_CHIPSET)" = "mt7986" ]; then \
-		cp $(PKG_BUILD_DIR)/bin/7986*WOCPU*_RAM_CODE_release.bin $(1)/lib/firmware/; \
+		cp $(PKG_BUILD_DIR)/bin/7986_WOCPU0_RAM_CODE_release.bin $(1)/lib/firmware/; \
 	fi
 endef
 
