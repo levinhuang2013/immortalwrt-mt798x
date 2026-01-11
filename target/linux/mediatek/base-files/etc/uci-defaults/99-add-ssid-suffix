@@ -6,7 +6,7 @@ board="$(board_name)"
 
 case "$board" in
     sx,7981r128)
-        echo "[7981R128] Initializing SSID auto-suffix..."
+        echo "Initializing SSID auto-suffix..."
 
         #
         # Detect the Factory partition in MTD
@@ -14,14 +14,14 @@ case "$board" in
         FACTORY_MTD=$(grep -i '"Factory"' /proc/mtd | cut -d: -f1)
 
         if [ -z "$FACTORY_MTD" ]; then
-            echo "[1981R128] ERROR: Factory partition not found in /proc/mtd"
+            echo "ERROR: Factory partition not found in /proc/mtd"
             exit 0
         fi
 
         FACTORY="/dev/${FACTORY_MTD}"
 
         if [ ! -e "$FACTORY" ]; then
-            echo "[7981R128] ERROR: Factory device ${FACTORY} does not exist"
+            echo "ERROR: Factory device ${FACTORY} does not exist"
             exit 0
         fi
 
@@ -34,25 +34,27 @@ case "$board" in
             | tr -d ' ' \
             | tr -d '\n' \
             | tail -c 4
+            | sed 's/^\(..\)\(..\)$/\2\1/'
+            | tr '[:lower:]' '[:upper:]'
         )"
 
         if [ -z "$mac_suffix" ]; then
-            echo "[7981R128] ERROR: Failed to read SSID suffix from ${FACTORY}"
+            echo "ERROR: Failed to read SSID suffix from ${FACTORY}"
             exit 0
         fi
 
-        echo "[7981R128] SSID suffix detected: ${mac_suffix}"
+        echo "SSID suffix detected: ${mac_suffix}"
 
         #
         # Update default SSID in Mediatek WiFi dat files
         #
-        sed -i "s/ImmortalWrt-2.4G/7981R128_${mac_suffix}/g" \
+        sed -i "s/ImmortalWrt-2.4G/ImmortalWrt-${mac_suffix}/g" \
             /etc/config/wireless 2>/dev/null
 
-        sed -i "s/ImmortalWrt-5G/7981R128_5G_${mac_suffix}/g" \
+        sed -i "s/ImmortalWrt-5G/ImmortalWrt-5G-${mac_suffix}/g" \
             /etc/config/wireless 2>/dev/null
 
-        echo "[7981R128] SSID updated successfully."
+        echo "SSID updated successfully."
         ;;
 esac
 
