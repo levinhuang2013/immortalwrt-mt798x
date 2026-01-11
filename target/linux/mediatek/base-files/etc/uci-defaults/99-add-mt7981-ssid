@@ -47,10 +47,10 @@ case "$board" in
         # Update default SSID in Mediatek WiFi dat files
         #
         sed -i "s/ImmortalWrt-2.4G/7981R128_${mac_suffix}/g" \
-            /etc/wireless/mediatek/mt7981.dbdc.b0.dat 2>/dev/null
+            /lib/wifi/mtwifi.sh 2>/dev/null
 
         sed -i "s/ImmortalWrt-5G/7981R128_5G_${mac_suffix}/g" \
-            /etc/wireless/mediatek/mt7981.dbdc.b1.dat 2>/dev/null
+            /lib/wifi/mtwifi.sh 2>/dev/null
 
         echo "[7981R128] SSID updated successfully."
         ;;
