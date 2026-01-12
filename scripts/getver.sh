@@ -56,4 +56,5 @@ try_hg() {
 }
 
 try_version || try_git || try_hg || REV="unknown"
-echo "$REV"
+build_time=`TZ='Asia/Shanghai' date "+%Y%m%d_%H%M"`
+echo "$REV-$build_time"
