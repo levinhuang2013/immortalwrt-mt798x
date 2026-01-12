@@ -35,7 +35,6 @@ case "$board" in
             | tr -d '\n' \
             | tail -c 4
             | sed 's/^\(..\)\(..\)$/\2\1/'
-            | tr '[:lower:]' '[:upper:]'
         )"
 
         if [ -z "$mac_suffix" ]; then
@@ -48,10 +47,10 @@ case "$board" in
         #
         # Update default SSID in Mediatek WiFi dat files
         #
-        sed -i "s/ImmortalWrt-2.4G/ImmortalWrt-${mac_suffix}/g" \
+        sed -i "s/ImmortalWrt-2.4G/7981R128-${mac_suffix}/g" \
             /etc/config/wireless 2>/dev/null
 
-        sed -i "s/ImmortalWrt-5G/ImmortalWrt-5G-${mac_suffix}/g" \
+        sed -i "s/ImmortalWrt-5G/7981R128-${mac_suffix}-5G/g" \
             /etc/config/wireless 2>/dev/null
 
         echo "SSID updated successfully."
