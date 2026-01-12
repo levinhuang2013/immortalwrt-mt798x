@@ -29,12 +29,7 @@ case "$board" in
         # Read 2 bytes from Factory offset 0x08 as SSID suffix
         #
         mac_suffix="$(
-            hexdump -s 0x8 -n 2 "$FACTORY" 2>/dev/null \
-            | head -n 1 \
-            | tr -d ' ' \
-            | tr -d '\n' \
-            | tail -c 4 \
-            | sed 's/^\(..\)\(..\)$/\2\1/; y/abcdef/ABCDEF/'
+            hexdump -s 0x8 -n 2 "$FACTORY" 2>/dev/null | head -n 1 | tr -d ' ' | tr -d '\n' | tail -c 4 | sed 's/^\(..\)\(..\)$/\2\1/; y/abcdef/ABCDEF/'
         )"
 
         if [ -z "$mac_suffix" ]; then
@@ -47,10 +42,10 @@ case "$board" in
         #
         # Update default SSID in Mediatek WiFi dat files
         #
-        sed -i "s/ImmortalWrt-2.4G/7981R128-${mac_suffix}/g" \
+        sed -i "s/ImmortalWrt-2.4G/ImmortalWrt-${mac_suffix}/g" \
             /etc/config/wireless 2>/dev/null
 
-        sed -i "s/ImmortalWrt-5G/7981R128-5G-${mac_suffix}/g" \
+        sed -i "s/ImmortalWrt-5G/ImmortalWrt-${mac_suffix}-5G/g" \
             /etc/config/wireless 2>/dev/null
 
         echo "SSID updated successfully."
