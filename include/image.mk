@@ -364,7 +364,7 @@ define Device/Init
 
   IMAGES :=
   ARTIFACTS :=
-  IMAGE_PREFIX := $(1)-$(IMG_PREFIX)
+  IMAGE_PREFIX := $(IMG_PREFIX)-$(1)
   IMAGE_NAME = $$(IMAGE_PREFIX)-$$(1)-$$(2)
   IMAGE_SIZE :=
   KERNEL_PREFIX = $$(IMAGE_PREFIX)
