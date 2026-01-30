@@ -1,0 +1,56 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+board="$(board_name)"
+
+case "$board" in
+    bananapi,bpi-r3-nor |\
+    bananapi,bpi-r3-nand)
+        echo "Initializing SSID auto-suffix..."
+
+        #
+        # Detect the Factory partition in MTD
+        #
+        FACTORY_MTD=$(grep -i '"Factory"' /proc/mtd | cut -d: -f1)
+
+        if [ -z "$FACTORY_MTD" ]; then
+            echo "ERROR: Factory partition not found in /proc/mtd"
+            exit 0
+        fi
+
+        FACTORY="/dev/${FACTORY_MTD}"
+
+        if [ ! -e "$FACTORY" ]; then
+            echo "ERROR: Factory device ${FACTORY} does not exist"
+            exit 0
+        fi
+
+        #
+        # Read 2 bytes from Factory offset 0x08 as SSID suffix
+        #
+        mac_suffix="$(
+            hexdump -s 0x8 -n 2 "$FACTORY" 2>/dev/null | head -n 1 | tr -d ' ' | tr -d '\n' | tail -c 4 | sed 's/^\(..\)\(..\)$/\2\1/; y/abcdef/ABCDEF/'
+        )"
+
+        if [ -z "$mac_suffix" ]; then
+            echo "ERROR: Failed to read SSID suffix from ${FACTORY}"
+            exit 0
+        fi
+
+        echo "SSID suffix detected: ${mac_suffix}"
+
+        #
+        # Update default SSID in Mediatek WiFi dat files
+        #
+        sed -i "s/ImmortalWrt-2.4G/BananaPi_${mac_suffix}/g" \
+            /etc/config/wireless 2>/dev/null
+
+        sed -i "s/ImmortalWrt-5G/BananaPi_${mac_suffix}-5G/g" \
+            /etc/config/wireless 2>/dev/null
+
+        echo "SSID updated successfully."
+        ;;
+esac
+
+exit 0
