@@ -5,7 +5,8 @@ MT7986_USB_PKGS := automount blkid blockdev fdisk \
     luci-app-usb-printer luci-i18n-usb-printer-zh-cn \
     kmod-usb-net-rndis usbutils
 
-MT7986_WWAN_PKGS := wwan uqmi luci-proto-qmi \
+MT7986_WWAN_PKGS := wwan uqmi modemmanager \
+    luci-proto-modemmanager luci-proto-qmi \
     kmod-usb-net-cdc-ether kmod-usb-net-cdc-mbim kmod-usb-net-cdc-ncm \
     kmod-usb-serial-option kmod-usb-serial-qualcomm
 
